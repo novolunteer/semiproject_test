@@ -19,4 +19,10 @@ public class RequestService {
     public InboundDetailDTO inboundOne(int inbound_id){
         return mapper.inboundOne(inbound_id);
     }
+    public List<InboundDTO> selectInbound(int user_id){
+        return mapper.selectInbound(user_id);
+    }
+    public InboundDTO selectInboundId(int inbound_id){
+        return mapper.selectInboundId(inbound_id);
+    }
 }

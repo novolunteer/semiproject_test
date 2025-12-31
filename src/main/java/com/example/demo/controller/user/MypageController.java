@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -14,10 +15,34 @@ import java.util.List;
 public class MypageController {
     private final RequestService service;
 
-    @GetMapping("/user/mypage")
-    public String mypage(Model model){
+    @GetMapping("/admin/mypage")
+    public String adminMypage(Model model){
         List<InboundDTO> list=service.inboundAll();
         model.addAttribute("list",list);
-        return "user/mypage";
+        return "mypage/admin";
     }
+
+    @GetMapping("/user/mypage")
+    public String userMypage(@RequestParam("user_id") int user_id, Model model){
+        List<InboundDTO> list=service.selectInbound(user_id);
+        model.addAttribute("list",list);
+        return "mypage/user";
+    }
+
+    @GetMapping("/user/backMypage")
+    public String userBackMypage(@RequestParam("inbound_id") int inbound_id, Model model){
+        InboundDTO dto=service.selectInboundId(inbound_id);
+        int user_id=dto.getUser_id();
+        List<InboundDTO> list=service.selectInbound(user_id);
+        model.addAttribute("list",list);
+        return "mypage/user";
+    }
+
+    @GetMapping("/admin/backMypage")
+    public String adminBackMypage(Model model){
+        List<InboundDTO> list=service.inboundAll();
+        model.addAttribute("list",list);
+        return "mypage/admin";
+    }
+
 }

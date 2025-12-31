@@ -20,4 +20,11 @@ public class SelectController {
         model.addAttribute("dto",dto);
         return "request/select";
     }
+
+    @GetMapping("/request/userSelect")
+    public String UserinboundOne(@RequestParam int inbound_id, Model model){
+        InboundDetailDTO dto=service.inboundOne(inbound_id);
+        model.addAttribute("dto",dto);
+        return "request/userSelect";
+    }
 }

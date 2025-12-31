@@ -10,4 +10,6 @@ import java.util.List;
 public interface RequestMapper {
     List<InboundDTO> inboundAll();
     InboundDetailDTO inboundOne(int inbound_id);
+    List<InboundDTO> selectInbound(int user_id);
+    InboundDTO selectInboundId(int inbound_id);
 }

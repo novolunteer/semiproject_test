@@ -9,4 +9,10 @@
     <select id="inboundOne" parameterType="int" resultType="InboundDetailDTO">
         select * from inbound_detail where inbound_id=#{value}
     </select>
+    <select id="selectInbound" parameterType="int" resultType="InboundDTO">
+        select * from inbound where user_id=#{value}
+    </select>
+    <select id="selectInboundId" parameterType="int" resultType="InboundDTO">
+        select * from inbound where inbound_id=#{value}
+    </select>
 </mapper>

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 public class InboundDTO {
     private int inbound_id;
-    private String user_id;
+    private int user_id;
     private LocalDate request_date;
     private String status;
 }

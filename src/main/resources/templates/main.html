@@ -14,7 +14,8 @@
             <p th:if="${session.roleMsg != null}" th:text="${session.roleMsg}"></p>
             <ul>
                 <li th:if="${session.userid == null}"><a th:href="@{/login/form}">login</a></li>
-                <li th:if="${session.userid != null}"><a th:href="@{/user/mypage}">마이페이지</a></li>
+                <li th:if="${session.userid != null && session.userid != 1}"><a th:href="@{/user/mypage(user_id=${session.userid})}">마이페이지</a></li>
+                <li th:if="${session.userid != null && session.userid == 1}"><a th:href="@{/admin/mypage}">마이페이지</a></li>
                 <li th:if="${session.userid != null}"><button onclick="logout()">logout</button></li>
             </ul>
             </div>
