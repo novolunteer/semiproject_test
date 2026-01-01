@@ -16,8 +16,8 @@ public class RequestService {
     public List<InboundDTO> inboundAll(){
         return mapper.inboundAll();
     }
-    public InboundDetailDTO inboundOne(int inbound_id){
-        return mapper.inboundOne(inbound_id);
+    public List<InboundDetailDTO> inboundList(int inbound_id){
+        return mapper.inboundList(inbound_id);
     }
     public List<InboundDTO> selectInbound(int user_id){
         return mapper.selectInbound(user_id);

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class LoginController {
     private final LoginService service;
 
-    @GetMapping("/login/form")
+    @GetMapping("/")
     public String loginForm(){
         return "login/form";
     }
@@ -35,11 +35,11 @@ public class LoginController {
                 if(userDTO.getRole_id() == 1){
                     session.setAttribute("userid",userDTO.getUser_id());
                     session.setAttribute("roleMsg","관리자 모드");
-                    return "redirect:/";
+                    return "redirect:/main";
                 }else {
                     session.setAttribute("userid",userDTO.getUser_id());
                     session.setAttribute("roleMsg","직원 모드");
-                    return "redirect:/";
+                    return "redirect:/main";
                 }
             }
         }

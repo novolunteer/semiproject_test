@@ -1,4 +1,4 @@
-package com.example.demo.controller.user;
+package com.example.demo.controller.mypage;
 
 import com.example.demo.dto.InboundDTO;
 import com.example.demo.service.RequestService;
@@ -23,16 +23,14 @@ public class MypageController {
     }
 
     @GetMapping("/user/mypage")
-    public String userMypage(@RequestParam("user_id") int user_id, Model model){
+    public String userMypage(@RequestParam int user_id, Model model){
         List<InboundDTO> list=service.selectInbound(user_id);
         model.addAttribute("list",list);
         return "mypage/user";
     }
 
     @GetMapping("/user/backMypage")
-    public String userBackMypage(@RequestParam("inbound_id") int inbound_id, Model model){
-        InboundDTO dto=service.selectInboundId(inbound_id);
-        int user_id=dto.getUser_id();
+    public String userBackMypage(@RequestParam int user_id, Model model){
         List<InboundDTO> list=service.selectInbound(user_id);
         model.addAttribute("list",list);
         return "mypage/user";

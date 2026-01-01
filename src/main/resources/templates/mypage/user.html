@@ -20,12 +20,12 @@
       <tr th:each="i:${list}">
         <td th:text="${i.inbound_id}"><td th:text="${i.request_date}"></td>
         <td th:text="${i.status}"></td>
-        <td><a th:href="@{/request/userSelect(inbound_id=${i.inbound_id})}">상세보기</a></td>
+        <td><a th:href="@{/request/userSelect(inbound_id=${i.inbound_id},user_id=${i.user_id})}">상세보기</a></td>
       </tr>
     </table>
   </div>
   <div class="footer">
-    <a th:href="@{/static}">메인 페이지로 이동</a>
+    <a th:href="@{/}">메인 페이지로 이동</a>
   </div>
 </div>
 </body>

@@ -13,16 +13,34 @@
             <div class="loginArea">
             <p th:if="${session.roleMsg != null}" th:text="${session.roleMsg}"></p>
             <ul>
-                <li th:if="${session.userid == null}"><a th:href="@{/login/form}">login</a></li>
-                <li th:if="${session.userid != null && session.userid != 1}"><a th:href="@{/user/mypage(user_id=${session.userid})}">마이페이지</a></li>
-                <li th:if="${session.userid != null && session.userid == 1}"><a th:href="@{/admin/mypage}">마이페이지</a></li>
                 <li th:if="${session.userid != null}"><button onclick="logout()">logout</button></li>
             </ul>
             </div>
         </div>
     </div>
+    <div class="nav">
+        <ul>
+            <li th:if="${session.userid != null && session.userid != 1}"><a th:href="@{/user/mypage(user_id=${session.userid})}">입출고 요청</a></li>
+            <li th:if="${session.userid != null && session.userid == 1}"><a th:href="@{/admin/mypage}">입출고 요청</a></li>
+        </ul>
+    </div>
     <div class="main">
-
+        <table th:if="${user_id == 1}">
+            <tr th:each="l:${list}">
+                <td><p th:text="|입고 ID: ${l.inbound_id} 요청자: ${l.user_id}|"></p>
+                    <p th:text="|${l.request_date} ${l.status}|"></p>
+                    <button th:onclick="|inboundDetail(${l.inbound_id})|">상세보기</button>
+                </td>
+            </tr>
+        </table>
+        <table th:if="${user_id == 2}">
+            <tr th:each="l:${list}">
+                <td><p th:text="|입고 ID: ${l.inbound_id} ${l.status}|"></p>
+                    <p th:text="|${l.request_date}|"></p>
+                    <button th:onclick="|inboundDetailUser(${l.inbound_id},${l.user_id})|">상세보기</button>
+                </td>
+            </tr>
+        </table>
     </div>
     <div class="footer"></div>
 </div>
@@ -35,6 +53,14 @@
                 alert(data);
                 location.href="/";
             })
+    }
+
+    function inboundDetail(inbound_id){
+        location.href = "/request/detail?inbound_id=" + inbound_id;
+    }
+
+    function inboundDetailUser(inbound_id, user_id){
+        location.href = "/request/userDetail?inbound_id=" + inbound_id + "&user_id=" + user_id;
     }
 </script>
 </html>
