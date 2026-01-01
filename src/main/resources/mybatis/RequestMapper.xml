@@ -15,4 +15,9 @@
     <select id="selectInboundId" parameterType="int" resultType="InboundDTO">
         select * from inbound where inbound_id=#{value}
     </select>
+    <insert id="approval" parameterType="ApprovalDTO">
+        insert into approval values(approval_seq.nextval,
+        #{target_type},#{bound_id},#{decision_type},#{reason},
+        #{user_id},sysdate)
+    </insert>
 </mapper>

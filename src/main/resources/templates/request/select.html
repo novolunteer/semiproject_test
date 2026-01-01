@@ -20,10 +20,39 @@
         <td th:text="${dto.inbound_detail_id}"></td><td th:text="${dto.inbound_id}"></td>
         <td th:text="${dto.product_id}"></td><td th:text="${dto.warehouse_id}"></td>
         <td th:text="${dto.quantity}"></td>
-        <td><button th:onclick="">승인</button></td><td><button>반려</button></td>
+        <td><button>승인</button></td><td><button onclick="reason(this)">반려</button></td>
       </tr>
+    </table>
+    <div id="reasonBox">
+    </div>
   </div>
-  <div class="footer"></div>
+  <div class="footer">
+  </div>
 </div>
 </body>
+<script>
+  function reason(btn){
+    const currentTr=btn.closest("tr");
+
+    // 이미 반려 row가 있으면 다시 만들지 않음
+    if(currentTr.nextElementSibling &&
+            currentTr.nextElementSibling
+                    .classList.contains("reasonRow")){
+      return;
+    }
+
+    const tr=document.createElement("tr");
+    tr.className="reasonRow";
+
+    tr.innerHTML=`
+                  <td colspan="7">
+                    <textarea name="reason" id="reason"
+                    cols="50" rows="5" placeholder="반려 사유를 입력하시오."></textarea><br>
+                    <button>확인</button>
+                  </td>
+                  `;
+
+    currentTr.after(tr);
+  }
+</script>
 </html>
