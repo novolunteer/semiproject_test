@@ -7,11 +7,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class InboundDetailDTO {
-    private int inbound_detail_id;
-    private int inbound_id;
+public class OutboundDetailDTO {
+    private int outbound_detail_id;
+    private int outbound_id;
     private int product_id;
-    private int warehouse_id;
     private int quantity;
     private String status;
 }

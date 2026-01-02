@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class InboundDetailDTO {
-    private int inbound_detail_id;
-    private int inbound_id;
-    private int product_id;
-    private int warehouse_id;
-    private int quantity;
+public class OutboundDTO {
+    private int outbound_id;
+    private int user_id;
+    private LocalDateTime request_date;
     private String status;
 }

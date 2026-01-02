@@ -25,19 +25,25 @@
         </ul>
     </div>
     <div class="main">
-        <table th:if="${user_id == 1}">
+        <div th:if="${user_id == 1}">
+            <button onclick="gomain()">전체</button> <button onclick="goinbound()">입고</button> <button onclick="gooutbound()">출고</button>
+        </div>
+        <div th:if="${user_id == 2}">
+            <button>전체</button> <button>입고</button> <button>출고</button>
+        </div>
+        <table th:if="${user_id == 1}" id="adminTable">
             <tr th:each="l:${list}">
-                <td><p th:text="|입고 ID: ${l.inbound_id} 요청자: ${l.user_id}|"></p>
+                <td><p th:text="|${l.io_type}(${l.io_id}) 요청자: ${l.user_id}|"></p>
                     <p th:text="|${l.request_date} ${l.status}|"></p>
-                    <button th:onclick="|inboundDetail(${l.inbound_id})|">상세보기</button>
+                    <button th:data-io-type="${l.io_type}" th:data-io-id="${l.io_id}" onclick="godetail(this)">상세보기</button>
                 </td>
             </tr>
         </table>
-        <table th:if="${user_id == 2}">
+        <table th:if="${user_id == 2}" id="userTable">
             <tr th:each="l:${list}">
-                <td><p th:text="|입고 ID: ${l.inbound_id} ${l.status}|"></p>
+                <td><p th:text="|${l.io_type} ${l.status}|"></p>
                     <p th:text="|${l.request_date}|"></p>
-                    <button th:onclick="|inboundDetailUser(${l.inbound_id},${l.user_id})|">상세보기</button>
+                    <button th:data-io-type="${l.io_type}" th:data-io-id="${l.io_id}" onclick="godetail(this)">상세보기</button>
                 </td>
             </tr>
         </table>
@@ -55,12 +61,57 @@
             })
     }
 
-    function inboundDetail(inbound_id){
-        location.href = "/request/detail?inbound_id=" + inbound_id;
+    function gomain(){
+        location.href="/main";
     }
 
-    function inboundDetailUser(inbound_id, user_id){
-        location.href = "/request/userDetail?inbound_id=" + inbound_id + "&user_id=" + user_id;
+    function goinbound(){
+        const table=document.getElementById("adminTable");
+        fetch('/goinbound')
+            .then(resp=>resp.json())
+            .then(data=>{
+                table.innerHTML="";
+
+                data.forEach(l=>{
+                    table.innerHTML+=`
+                                    <tr>
+                                        <td>
+                                            <p>${l.inbound_id} 요청자:${l.user_id} ${l.status}</p>
+                                            <p>${l.request_date}</p>
+                                            <button>상세보기</button>
+                                        </td>
+                                    </tr>
+                                    `
+                })
+            })
+    }
+
+    function gooutbound(){
+        const table=document.getElementById("adminTable");
+        fetch('/gooutbound')
+            .then(resp=>resp.json())
+            .then(data=>{
+                table.innerHTML="";
+
+                data.forEach(l=>{
+                    table.innerHTML+=`
+                                    <tr>
+                                        <td>
+                                            <p>${l.outbound_id} 요청자:${l.user_id} ${l.status}</p>
+                                            <p>${l.request_date}</p>
+                                            <button>상세보기</button>
+                                        </td>
+                                    </tr>
+                                    `
+                })
+            })
+    }
+
+    function godetail(btn){
+        const io_type=btn.dataset.ioType;
+        const io_id=btn.dataset.ioId;
+
+        location.href="/request/detail?io_type=" + io_type + "&io_id=" + io_id;
     }
 </script>
 </html>

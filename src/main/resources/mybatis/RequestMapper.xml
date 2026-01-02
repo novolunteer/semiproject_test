@@ -3,18 +3,81 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.RequestMapper">
+    <!-- 관리자용 입고 요청 내역 -->
     <select id="inboundAll" resultType="InboundDTO">
         select * from inbound
     </select>
+    <!-- 관리자용 출고 요청 내역 -->
+    <select id="outboundAll" resultType="OutboundDTO">
+        select * from outbound
+    </select>
+    <!-- 관리자용 입출고 요청 전체 내역 -->
+    <select id="adminBound" resultType="BoundDTO">
+        select
+        'in' as io_type,
+        i.inbound_id as io_id,
+        i.user_id,
+        i.request_date,
+        i.status
+        from inbound i
+
+        union all
+
+        select
+        'out' as io_type,
+        o.outbound_id as io_id,
+        o.user_id,
+        o.request_date,
+        o.status
+        from outbound o
+
+        order by request_date desc
+    </select>
+    <!-- 직원용 입출고 요청 전체 내역 -->
+    <select id="userBound" parameterType="int" resultType="BoundDTO">
+        select * from
+        (select
+        'in' as io_type,
+        i.inbound_id as io_id,
+        i.user_id,
+        i.request_date,
+        i.status
+        from inbound i
+
+        union all
+
+        select
+        'out' as io_type,
+        o.outbound_id as io_id,
+        o.user_id,
+        o.request_date,
+        o.status
+        from outbound o
+
+        order by request_date desc)
+        where user_id=#{value}
+    </select>
+    <!-- 출고 요청 세부 내역 -->
+    <select id="outboundList" parameterType="int" resultType="OutboundDetailDTO">
+        select * from outbound_detail where outbound_id=#{value}
+    </select>
+    <!-- 입고 요청 세부 내역 -->
     <select id="inboundList" parameterType="int" resultType="InboundDetailDTO">
         select * from inbound_detail where inbound_id=#{value}
     </select>
+    <!-- 직원용 출고 요청 내역 -->
+    <select id="selectOutbound" parameterType="int" resultType="OutboundDTO">
+        select * from outbound where user_id=#{value}
+    </select>
+    <!-- 직원용 입고 요청 내역 -->
     <select id="selectInbound" parameterType="int" resultType="InboundDTO">
         select * from inbound where user_id=#{value}
     </select>
+    <!-- 아직 사용 X -->
     <select id="selectInboundId" parameterType="int" resultType="InboundDTO">
         select * from inbound where inbound_id=#{value}
     </select>
+    <!-- 관리자 승인/반려 내역 추가 -->
     <insert id="approval" parameterType="ApprovalDTO">
         insert into approval values(approval_seq.nextval,
         #{target_type},#{bound_id},#{decision_type},#{reason},

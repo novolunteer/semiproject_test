@@ -5,12 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class InboundDTO {
     private int inbound_id;
     private int user_id;
-    private LocalDate request_date;
+    private LocalDateTime request_date;
     private String status;
 }
