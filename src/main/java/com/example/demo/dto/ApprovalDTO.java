@@ -10,10 +10,11 @@ import java.time.LocalDateTime;
 @Data
 public class ApprovalDTO {
     private int approval_id;
-    private String target_type;
-    private int bound_id;
-    private String decision_type;
+    private int approver_id;
+    private String bound_type;
+    private int inbound_id;
+    private int outbound_id;
+    private String approval_status;
     private String reason;
-    private int user_id;
     private LocalDateTime created_at;
 }

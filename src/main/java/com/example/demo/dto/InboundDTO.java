@@ -12,7 +12,9 @@ import java.time.LocalDateTime;
 @Data
 public class InboundDTO {
     private int inbound_id;
-    private int user_id;
+    private int webuser_id;
     private LocalDateTime request_date;
-    private String status;
+    private String approval_status;
+    private String is_refund;
+    private int lot_out_id;
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class BoundDTO {
     private String io_type;
     private String io_id;
-    private String user_id;
+    private String webuser_id;
     private LocalDateTime request_date;
-    private String status;
+    private String approval_status;
 }

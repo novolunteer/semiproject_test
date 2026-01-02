@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class OutboundDTO {
     private int outbound_id;
-    private int user_id;
+    private int webuser_id;
     private LocalDateTime request_date;
-    private String status;
+    private String approval_status;
 }

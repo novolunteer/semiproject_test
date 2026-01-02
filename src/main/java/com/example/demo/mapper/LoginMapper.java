@@ -1,10 +1,9 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.LoginDTO;
-import com.example.demo.dto.UserDTO;
+import com.example.demo.dto.WebuserDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface LoginMapper {
-    UserDTO selectUser(String id);
+    WebuserDTO selectWebuser(String id);
 }

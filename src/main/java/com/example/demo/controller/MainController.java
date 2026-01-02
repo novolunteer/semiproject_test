@@ -20,14 +20,18 @@ public class MainController {
 
     @GetMapping("/main")
     public String main(HttpSession session, Model model){
-        int user_id=(int)session.getAttribute("userid");
-        if(user_id == 1){
+        int role_id = (int) session.getAttribute("role_id");
+        int webuser_id = (int) session.getAttribute("webuser_id");
+        if(role_id == 1){
             List<BoundDTO> list=service.adminBound();
             model.addAttribute("list",list);
-            model.addAttribute("user_id",user_id);
+            model.addAttribute("webuser_id",webuser_id);
+            model.addAttribute("role_id",role_id);
         }else {
-            List<BoundDTO> list=service.userBound(user_id);
+            List<BoundDTO> list=service.userBound(webuser_id);
             model.addAttribute("list",list);
+            model.addAttribute("webuser_id",webuser_id);
+            model.addAttribute("role_id",role_id);
         }
         return "main";
     }
@@ -35,22 +39,24 @@ public class MainController {
     @GetMapping("/goinbound")
     @ResponseBody
     public List<InboundDTO> goinbound(HttpSession session){
-        int user_id=(int)session.getAttribute("userid");
-        if(user_id == 1){
+        int role_id = (int) session.getAttribute("role_id");
+        int webuser_id = (int) session.getAttribute("webuser_id");
+        if(role_id == 1){
             return service.inboundAll();
         }else {
-            return service.selectInbound(user_id);
+            return service.selectInbound(webuser_id);
         }
     }
 
     @GetMapping("/gooutbound")
     @ResponseBody
     public List<OutboundDTO> gooutbound(HttpSession session){
-        int user_id=(int)session.getAttribute("userid");
-        if(user_id == 1){
+        int role_id = (int) session.getAttribute("role_id");
+        int webuser_id = (int) session.getAttribute("webuser_id");
+        if(role_id == 1){
             return service.outbloundAll();
         }else {
-            return service.selectOutbound(user_id);
+            return service.selectOutbound(webuser_id);
         }
     }
 }

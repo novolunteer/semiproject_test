@@ -13,37 +13,39 @@
             <div class="loginArea">
             <p th:if="${session.roleMsg != null}" th:text="${session.roleMsg}"></p>
             <ul>
-                <li th:if="${session.userid != null}"><button onclick="logout()">logout</button></li>
+                <li th:if="${session.webuser_id != null}"><button onclick="logout()">logout</button></li>
             </ul>
             </div>
         </div>
     </div>
     <div class="nav">
         <ul>
-            <li th:if="${session.userid != null && session.userid != 1}"><a th:href="@{/user/mypage(user_id=${session.userid})}">입출고 요청</a></li>
-            <li th:if="${session.userid != null && session.userid == 1}"><a th:href="@{/admin/mypage}">입출고 요청</a></li>
+            <li th:if="${session.webuser_id != null && session.role_id == 2}">입출고 요청</li>
+            <li th:if="${session.webuser_id != null && session.role_id == 1}">입출고 요청</li>
         </ul>
     </div>
     <div class="main">
-        <div th:if="${user_id == 1}">
+        <div th:if="${role_id == 1}">
             <button onclick="gomain()">전체</button> <button onclick="goinbound()">입고</button> <button onclick="gooutbound()">출고</button>
         </div>
-        <div th:if="${user_id == 2}">
-            <button>전체</button> <button>입고</button> <button>출고</button>
+        <div th:if="${role_id == 2}">
+            <button onclick="gomain()">전체</button> <button onclick="goinbound2()">입고</button> <button onclick="gooutbound2()">출고</button>
         </div>
-        <table th:if="${user_id == 1}" id="adminTable">
+        <table th:if="${role_id == 1}" id="adminTable">
             <tr th:each="l:${list}">
-                <td><p th:text="|${l.io_type}(${l.io_id}) 요청자: ${l.user_id}|"></p>
-                    <p th:text="|${l.request_date} ${l.status}|"></p>
-                    <button th:data-io-type="${l.io_type}" th:data-io-id="${l.io_id}" onclick="godetail(this)">상세보기</button>
+                <td><p th:text="|${l.io_type}(${l.io_id}) 요청자: ${l.webuser_id}|"></p>
+                    <p th:text="|${l.request_date} ${l.approval_status}|"></p>
+                    <a th:if="${l.io_type == 'in'}" th:href="@{/request/Indetail(io_id=${l.io_id})}">상세보기</a>
+                    <a th:if="${l.io_type == 'out'}" th:href="@{/request/Outdetail(io_id=${l.io_id})}">상세보기</a>
                 </td>
             </tr>
         </table>
-        <table th:if="${user_id == 2}" id="userTable">
+        <table th:if="${role_id == 2}" id="userTable">
             <tr th:each="l:${list}">
-                <td><p th:text="|${l.io_type} ${l.status}|"></p>
+                <td><p th:text="|${l.io_type} ${l.approval_status}|"></p>
                     <p th:text="|${l.request_date}|"></p>
-                    <button th:data-io-type="${l.io_type}" th:data-io-id="${l.io_id}" onclick="godetail(this)">상세보기</button>
+                    <a th:if="${l.io_type == 'in'}" th:href="@{/request/indetail1(io_id=${l.io_id})}">상세보기</a>
+                    <a th:if="${l.io_type == 'out'}" th:href="@{/request/outdetail1(io_id=${l.io_id})}">상세보기</a>
                 </td>
             </tr>
         </table>
@@ -51,7 +53,7 @@
     <div class="footer"></div>
 </div>
 </body>
-<script>
+<script th:inline="javascript">
     function logout(){
         fetch('/logout')
             .then(resp=>resp.text())
@@ -76,12 +78,33 @@
                     table.innerHTML+=`
                                     <tr>
                                         <td>
-                                            <p>${l.inbound_id} 요청자:${l.user_id} ${l.status}</p>
+                                            <p>${l.inbound_id} 요청자:${l.webuser_id} ${l.approval_status}</p>
                                             <p>${l.request_date}</p>
-                                            <button>상세보기</button>
+                                            <a href="/request/indetail?inbound_id=${l.inbound_id}">상세보기</a>
                                         </td>
                                     </tr>
-                                    `
+                                    `;
+                })
+            })
+    }
+
+    function goinbound2(){
+        const table=document.getElementById("userTable");
+        fetch('/goinbound')
+            .then(resp=>resp.json())
+            .then(data=>{
+                table.innerHTML="";
+
+                data.forEach(l=>{
+                    table.innerHTML+=`
+                                    <tr>
+                                        <td>
+                                            <p>${l.inbound_id} 요청자:${l.webuser_id} ${l.approval_status}</p>
+                                            <p>${l.request_date}</p>
+                                            <a href="/request/indetail?inbound_id=${l.inbound_id}">상세보기</a>
+                                        </td>
+                                    </tr>
+                                    `;
                 })
             })
     }
@@ -97,21 +120,35 @@
                     table.innerHTML+=`
                                     <tr>
                                         <td>
-                                            <p>${l.outbound_id} 요청자:${l.user_id} ${l.status}</p>
+                                            <p>${l.outbound_id} 요청자:${l.webuser_id} ${l.approval_status}</p>
                                             <p>${l.request_date}</p>
-                                            <button>상세보기</button>
+                                            <a href="/request/outdetail?outbound_id=${l.outbound_id}">상세보기</a>
                                         </td>
                                     </tr>
-                                    `
+                                    `;
                 })
             })
     }
 
-    function godetail(btn){
-        const io_type=btn.dataset.ioType;
-        const io_id=btn.dataset.ioId;
+    function gooutbound2(){
+        const table=document.getElementById("userTable");
+        fetch('/gooutbound')
+            .then(resp=>resp.json())
+            .then(data=>{
+                table.innerHTML="";
 
-        location.href="/request/detail?io_type=" + io_type + "&io_id=" + io_id;
+                data.forEach(l=>{
+                    table.innerHTML+=`
+                                    <tr>
+                                        <td>
+                                            <p>${l.outbound_id} 요청자:${l.webuser_id} ${l.approval_status}</p>
+                                            <p>${l.request_date}</p>
+                                            <a href="/request/outdetail?outbound_id=${l.outbound_id}">상세보기</a>
+                                        </td>
+                                    </tr>
+                                    `;
+                })
+            })
     }
 </script>
 </html>

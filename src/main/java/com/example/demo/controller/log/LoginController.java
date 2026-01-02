@@ -1,7 +1,7 @@
 package com.example.demo.controller.log;
 
 import com.example.demo.dto.LoginDTO;
-import com.example.demo.dto.UserDTO;
+import com.example.demo.dto.WebuserDTO;
 import com.example.demo.service.LoginService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class LoginController {
     @PostMapping("/login/ok")
     public String loginOk(LoginDTO dto, HttpSession session, Model model){
         String id=dto.getId();
-        UserDTO userDTO=service.selectUser(id);
+        WebuserDTO userDTO=service.selectWebuser(id);
         if(userDTO == null){
             model.addAttribute("error","존재하지 않는 아이디입니다.");
             return "login/form";
@@ -33,11 +33,13 @@ public class LoginController {
                 return "login/form";
             }else{
                 if(userDTO.getRole_id() == 1){
-                    session.setAttribute("userid",userDTO.getUser_id());
+                    session.setAttribute("webuser_id",userDTO.getWebuser_id());
+                    session.setAttribute("role_id",userDTO.getRole_id());
                     session.setAttribute("roleMsg","관리자 모드");
                     return "redirect:/main";
                 }else {
-                    session.setAttribute("userid",userDTO.getUser_id());
+                    session.setAttribute("webuser_id",userDTO.getWebuser_id());
+                    session.setAttribute("role_id",userDTO.getRole_id());
                     session.setAttribute("roleMsg","직원 모드");
                     return "redirect:/main";
                 }

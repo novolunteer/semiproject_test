@@ -9,12 +9,14 @@ import java.util.List;
 public interface RequestMapper {
     List<InboundDTO> inboundAll();
     List<InboundDetailDTO> inboundList(int inbound_id);
-    List<InboundDTO> selectInbound(int user_id);
+    List<InboundDTO> selectInbound(int webuser_id);
     List<OutboundDTO> outboundAll();
     List<OutboundDetailDTO> outboundList(int outbound_id);
-    List<OutboundDTO> selectOutbound(int user_id);
+    List<OutboundDTO> selectOutbound(int webuser_id);
     List<BoundDTO> adminBound();
-    List<BoundDTO> userBound(int user_id);
+    List<BoundDTO> userBound(int webuser_id);
+    int approvalIn(ApprovalDTO dto);
+    int approvalOut(ApprovalDTO dto);
 
 
 }

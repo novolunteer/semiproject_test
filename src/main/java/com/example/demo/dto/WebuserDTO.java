@@ -8,12 +8,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserDTO {
-    private int user_id;
+public class WebuserDTO {
+    private int webuser_id;
     private String id;
     private String password;
-    private String name;
+    private String webuser_name;
     private int role_id;
-    private String account_status;
+    private String is_active;
     private LocalDate created_at;
 }

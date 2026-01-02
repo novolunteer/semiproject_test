@@ -16,9 +16,9 @@
         select
         'in' as io_type,
         i.inbound_id as io_id,
-        i.user_id,
+        i.webuser_id,
         i.request_date,
-        i.status
+        i.approval_status
         from inbound i
 
         union all
@@ -26,9 +26,9 @@
         select
         'out' as io_type,
         o.outbound_id as io_id,
-        o.user_id,
+        o.webuser_id,
         o.request_date,
-        o.status
+        o.approval_status
         from outbound o
 
         order by request_date desc
@@ -39,9 +39,9 @@
         (select
         'in' as io_type,
         i.inbound_id as io_id,
-        i.user_id,
+        i.webuser_id,
         i.request_date,
-        i.status
+        i.approval_status
         from inbound i
 
         union all
@@ -49,13 +49,13 @@
         select
         'out' as io_type,
         o.outbound_id as io_id,
-        o.user_id,
+        o.webuser_id,
         o.request_date,
-        o.status
+        o.approval_status
         from outbound o
 
         order by request_date desc)
-        where user_id=#{value}
+        where webuser_id=#{value}
     </select>
     <!-- 출고 요청 세부 내역 -->
     <select id="outboundList" parameterType="int" resultType="OutboundDetailDTO">
@@ -67,20 +67,23 @@
     </select>
     <!-- 직원용 출고 요청 내역 -->
     <select id="selectOutbound" parameterType="int" resultType="OutboundDTO">
-        select * from outbound where user_id=#{value}
+        select * from outbound where webuser_id=#{value}
     </select>
     <!-- 직원용 입고 요청 내역 -->
     <select id="selectInbound" parameterType="int" resultType="InboundDTO">
-        select * from inbound where user_id=#{value}
+        select * from inbound where webuser_id=#{value}
     </select>
     <!-- 아직 사용 X -->
     <select id="selectInboundId" parameterType="int" resultType="InboundDTO">
         select * from inbound where inbound_id=#{value}
     </select>
-    <!-- 관리자 승인/반려 내역 추가 -->
-    <insert id="approval" parameterType="ApprovalDTO">
-        insert into approval values(approval_seq.nextval,
-        #{target_type},#{bound_id},#{decision_type},#{reason},
-        #{user_id},sysdate)
+    <!-- 관리자 승인 내역 추가 -->
+    <insert id="approvalIn" parameterType="ApprovalDTO">
+        insert into approval values(approval_seq.nextval,#{approver_id},'in',#{inbound_id},null,#{approval_status},null,sysdate)
+    </insert>
+    <!-- 관리자 반려 내역 추가 -->
+    <insert id="approvalOut" parameterType="ApprovalDTO">
+        insert into approval values(approval_seq.nextval,#{approver_id},'out',null,#{outbound_id},#{reason},#{approval_status},
+        #{reason},sysdate)
     </insert>
 </mapper>
