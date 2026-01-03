@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.WebuserMapper">
+    <select id="webuserList" parameterType="map"
+            resultType="WebuserDTO">
+        select * from
+        (select rownum rn, m.* from (select * from webuser <include refid="search"/> order by webuser_id) m )
+        <![CDATA[ where rn >=#{startRow} and rn <=#{endRow} ]]>
+    </select>
+    <select id="count" resultType="int" parameterType="map">
+        select NVL(count(*),0) from webuser
+        <include refid="search"/>
+    </select>
+    <!-- 검색 조건문 -->
+    <sql id="search">
+        <if test="field != null and field != ''">
+            where ${field} like '%'||#{keyword}||'%'
+        </if>
+    </sql>
+</mapper>
