@@ -42,10 +42,10 @@ public class WebuserService {
     public WebuserDTO selectWebuser(int webuser_id){
         return mapper.selectWebuser(webuser_id);
     }
-    public int insertWebuser(WebuserDTO dto){
-        return mapper.insertWebuser(dto);
+    public boolean insertWebuser(WebuserDTO dto){
+        return mapper.insertWebuser(dto) > 0;
     }
-    public int updateWebuser(WebuserDTO dto){
-        return mapper.updateWebuser(dto);
+    public boolean updateWebuser(WebuserDTO dto){
+        return mapper.updateWebuser(dto) > 0;
     }
 }

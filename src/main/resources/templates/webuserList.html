@@ -28,7 +28,6 @@
     </div>
     <div class="main">
         <div>
-            <p th:if="${error != null}" th:text="${error}" style="color: red"></p>
             <button onclick="insertWebuser()">계정 추가</button>
         </div>
         <div>
@@ -85,9 +84,16 @@
     </div>
 </div>
 </body>
-<script>
+<script th:inline="javascript">
     function insertWebuser(){
         location.href="/webuser/insert";
+    }
+
+    let status = /*[[${status}]]*/ null;
+    let msg = /*[[${msg}]]*/ null;
+
+    if (status && msg) {
+        alert(msg);
     }
 </script>
 </html>

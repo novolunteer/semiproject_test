@@ -41,7 +41,6 @@ public class WebuserListController {
         model.addAttribute("pageInfo",map.get("pageInfo"));
         model.addAttribute("field",field);
         model.addAttribute("keyword",keyword);
-        model.addAttribute("error",error);
 
         return "webuserList";
     }
