@@ -28,6 +28,8 @@
     </div>
     <div class="main">
         <div>
+            <p th:if="${error != null}" th:text="${error}" style="color: red"></p>
+            <button onclick="insertWebuser()">계정 추가</button>
         </div>
         <div>
             <form th:action="@{/webuser/list}" method="get">
@@ -62,8 +64,8 @@
                     </td>
                     <td th:text="${webuser.created_at}"></td>
                     <td th:text="${webuser.is_active == 'y' ? '활성':'비활성'}"></td>
-                    <td><a th:href="@{/webuser/update}">수정</a></td>
-                    <td><a th:href="@{/webuser/delete}">삭제</a></td>
+                    <td><a th:href="@{/webuser/update(webuser_id=${webuser.webuser_id})}">수정</a></td>
+                    <td><a th:href="@{/webuser/delete(webuser_id=${webuser.webuser_id})}">삭제</a></td>
                 </tr>
             </table>
         </div>
@@ -83,4 +85,9 @@
     </div>
 </div>
 </body>
+<script>
+    function insertWebuser(){
+        location.href="/webuser/insert";
+    }
+</script>
 </html>

@@ -38,4 +38,14 @@ public class WebuserService {
 
         return result;
     }
+
+    public WebuserDTO selectWebuser(int webuser_id){
+        return mapper.selectWebuser(webuser_id);
+    }
+    public int insertWebuser(WebuserDTO dto){
+        return mapper.insertWebuser(dto);
+    }
+    public int updateWebuser(WebuserDTO dto){
+        return mapper.updateWebuser(dto);
+    }
 }

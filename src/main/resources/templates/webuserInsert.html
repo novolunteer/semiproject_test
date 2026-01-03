@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>webuserInsert</title>
+</head>
+<body>
+<div class="wrap">
+    <h1>계정 추가</h1>
+    <form th:action="@{/webuser/insert}" method="post">
+        아이디 <input type="text" name="id" id="id"><br>
+        비밀번호 <input type="password" name="password" id="password"><br>
+        이름 <input type="text" name="webuser_name" id="webuser_name"><br>
+        <input type="radio" name="role_id" value="1">관리자
+        <input type="radio" name="role_id" value="2">사무 직원
+        <input type="radio" name="role_id" value="3">현장 직원<br>
+        <input type="submit" value="추가">
+    </form>
+</div>
+</body>
+</html>

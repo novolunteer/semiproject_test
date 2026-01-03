@@ -23,8 +23,7 @@ public class WebuserListController {
                               @RequestParam(value = "field", required = false) String field,
                               @RequestParam(value = "keyword", required = false) String keyword,
                               Model model){
-        int webuser_id = (int) session.getAttribute("webuser_id");
-        String roleMsg = (String) session.getAttribute("roleMsg");
+       String error = (String) session.getAttribute("error");
 
         // 역할 검색일 때만 문자열 → 숫자 변환
         if ("role_id".equals(field) && keyword != null && !keyword.isBlank()) {
@@ -42,9 +41,7 @@ public class WebuserListController {
         model.addAttribute("pageInfo",map.get("pageInfo"));
         model.addAttribute("field",field);
         model.addAttribute("keyword",keyword);
-
-        model.addAttribute("webuser_id",webuser_id);
-        model.addAttribute("roleMsg",roleMsg);
+        model.addAttribute("error",error);
 
         return "webuserList";
     }

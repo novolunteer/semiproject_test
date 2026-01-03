@@ -10,4 +10,7 @@ import java.util.Map;
 public interface WebuserMapper {
     List<WebuserDTO> webuserList(Map<String,Object> map);
     int count(Map<String,Object> map);
+    WebuserDTO selectWebuser(int webuser_id);
+    int updateWebuser(WebuserDTO dto);
+    int insertWebuser(WebuserDTO dto);
 }
