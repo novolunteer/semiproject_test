@@ -35,8 +35,16 @@
             <tr th:each="l:${list}">
                 <td><p th:text="|${l.io_type}(${l.io_id}) 요청자: ${l.webuser_id}|"></p>
                     <p th:text="|${l.request_date} ${l.approval_status}|"></p>
-                    <a th:if="${l.io_type == 'in'}" th:href="@{/request/Indetail(io_id=${l.io_id})}">상세보기</a>
-                    <a th:if="${l.io_type == 'out'}" th:href="@{/request/Outdetail(io_id=${l.io_id})}">상세보기</a>
+                    <a th:if="${l.io_type=='in'}"
+                       th:href="@{/request/admin/inbound(inbound_id=${l.io_id})}">
+                        상세보기
+                    </a>
+
+                    <a th:if="${l.io_type=='out'}"
+                       th:href="@{/request/admin/outbound(outbound_id=${l.io_id})}">
+                        상세보기
+                    </a>
+
                 </td>
             </tr>
         </table>
@@ -44,8 +52,17 @@
             <tr th:each="l:${list}">
                 <td><p th:text="|${l.io_type} ${l.approval_status}|"></p>
                     <p th:text="|${l.request_date}|"></p>
-                    <a th:if="${l.io_type == 'in'}" th:href="@{/request/indetail1(io_id=${l.io_id})}">상세보기</a>
-                    <a th:if="${l.io_type == 'out'}" th:href="@{/request/outdetail1(io_id=${l.io_id})}">상세보기</a>
+                    <a th:if="${l.io_type=='in'}"
+                       th:href="@{/request/user/inbound(inbound_id=${l.io_id})}">
+                        상세보기
+                    </a>
+
+                    <a th:if="${l.io_type=='out'}"
+                       th:href="@{/request/user/outbound(outbound_id=${l.io_id})}">
+                        상세보기
+                    </a>
+
+
                 </td>
             </tr>
         </table>
@@ -80,7 +97,7 @@
                                         <td>
                                             <p>${l.inbound_id} 요청자:${l.webuser_id} ${l.approval_status}</p>
                                             <p>${l.request_date}</p>
-                                            <a href="/request/indetail?inbound_id=${l.inbound_id}">상세보기</a>
+                                            <a href="/request/admin/inbound?inbound_id=${l.inbound_id}">상세보기</a>
                                         </td>
                                     </tr>
                                     `;
@@ -95,13 +112,13 @@
             .then(data=>{
                 table.innerHTML="";
 
-                data.forEach(l=>{
-                    table.innerHTML+=`
+                data.forEach(l=> {
+                    table.innerHTML += `
                                     <tr>
                                         <td>
                                             <p>${l.inbound_id} 요청자:${l.webuser_id} ${l.approval_status}</p>
                                             <p>${l.request_date}</p>
-                                            <a href="/request/indetail?inbound_id=${l.inbound_id}">상세보기</a>
+                                            <a href="/request/user/inbound?inbound_id=${l.inbound_id}">상세보기</a>
                                         </td>
                                     </tr>
                                     `;
@@ -122,7 +139,7 @@
                                         <td>
                                             <p>${l.outbound_id} 요청자:${l.webuser_id} ${l.approval_status}</p>
                                             <p>${l.request_date}</p>
-                                            <a href="/request/outdetail?outbound_id=${l.outbound_id}">상세보기</a>
+                                            <a href="/request/admin/outbound?outbound_id=${l.outbound_id}">상세보기</a>
                                         </td>
                                     </tr>
                                     `;
@@ -143,7 +160,7 @@
                                         <td>
                                             <p>${l.outbound_id} 요청자:${l.webuser_id} ${l.approval_status}</p>
                                             <p>${l.request_date}</p>
-                                            <a href="/request/outdetail?outbound_id=${l.outbound_id}">상세보기</a>
+                                            <a href="/request/user/outbound?outbound_id=${l.outbound_id}">상세보기</a>
                                         </td>
                                     </tr>
                                     `;
