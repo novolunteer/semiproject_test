@@ -13,4 +13,5 @@ public interface WebuserMapper {
     WebuserDTO selectWebuser(int webuser_id);
     int updateWebuser(WebuserDTO dto);
     int insertWebuser(WebuserDTO dto);
+    int deleteWebuser(int webuser_id);
 }

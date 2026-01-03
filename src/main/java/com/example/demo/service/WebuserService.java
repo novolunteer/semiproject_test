@@ -48,4 +48,7 @@ public class WebuserService {
     public boolean updateWebuser(WebuserDTO dto){
         return mapper.updateWebuser(dto) > 0;
     }
+    public boolean deleteWebuser(int webuser_id){
+        return mapper.deleteWebuser(webuser_id) > 0;
+    }
 }

@@ -29,4 +29,7 @@
     <insert id="insertWebuser" parameterType="WebuserDTO">
         insert into webuser values(webuser_seq.nextval,#{id},#{password},#{webuser_name},#{role_id},'y',sysdate)
     </insert>
+    <delete id="deleteWebuser" parameterType="int">
+        delete from webuser where webuser_id=#{value}
+    </delete>
 </mapper>
