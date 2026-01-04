@@ -73,17 +73,44 @@
     <select id="selectInbound" parameterType="int" resultType="InboundDTO">
         select * from inbound where webuser_id=#{value}
     </select>
-    <!-- 아직 사용 X -->
+    <!-- 입고 상세 테이블 수정 후 입고 테이블 요청 상태 조회 -->
     <select id="selectInboundId" parameterType="int" resultType="InboundDTO">
         select * from inbound where inbound_id=#{value}
     </select>
-    <!-- 관리자 승인 내역 추가 -->
-    <insert id="approvalIn" parameterType="ApprovalDTO">
-        insert into approval values(approval_seq.nextval,#{approver_id},'in',#{inbound_id},null,#{approval_status},null,sysdate)
+    <!-- 출고 상세 테이블 수정 후 출고 테이블 요청 상태 조회 -->
+    <select id="selectOutboundId" parameterType="int" resultType="OutboundDTO">
+        select * from outbound where outbound_id=#{value}
+    </select>
+    <!-- 관리자 입고 승인 내역 추가 -->
+    <insert id="approvalIn" parameterType="map">
+        insert into approval values(approval_seq.nextval,#{approver_id},'in',#{inbound_id},null,#{approval_status},
+        null,sysdate)
     </insert>
-    <!-- 관리자 반려 내역 추가 -->
-    <insert id="approvalOut" parameterType="ApprovalDTO">
-        insert into approval values(approval_seq.nextval,#{approver_id},'out',null,#{outbound_id},#{reason},#{approval_status},
+    <!-- 관리자 입고 반려 내역 추가 -->
+    <insert id="rejectionIn" parameterType="map">
+        insert into approval values(approval_seq.nextval,#{approver_id},'in',#{inbound_id},null,#{approval_status},
         #{reason},sysdate)
     </insert>
+    <update id="inboundDetailStatus" parameterType="map">
+        update inbound_detail set approval_status=#{approval_status} where inbound_detail_id=#{inbound_detail_id}
+    </update>
+    <update id="inboundStatus" parameterType="map">
+        update inbound set approval_status=#{approval_status} where inbound_id=#{inbound_id}
+    </update>
+    <!-- 관리자 출고 승인 내역 추가 -->
+    <insert id="approvalOut" parameterType="map">
+        insert into approval values(approval_seq.nextval,#{approver_id},'out',null,#{outbound_id},#{approval_status},
+        null,sysdate)
+    </insert>
+    <!-- 관리자 출고 반려 내역 추가 -->
+    <insert id="rejectionOut" parameterType="map">
+        insert into approval values(approval_seq.nextval,#{approver_id},'out',null,#{outbound_id},#{approval_status},
+        #{reason},sysdate)
+    </insert>
+    <update id="outboundDetailStatus" parameterType="map">
+        update outbound_detail set approval_status=#{approval_status} where outbound_detail_id=#{outbound_detail_id}
+    </update>
+    <update id="outboundStatus" parameterType="map">
+        update outbound set approval_status=#{approval_status} where outbound_id=#{outbound_id}
+    </update>
 </mapper>

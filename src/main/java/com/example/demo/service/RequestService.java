@@ -5,7 +5,9 @@ import com.example.demo.mapper.RequestMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,71 @@ public class RequestService {
     public List<OutboundDTO> selectOutbound(int webuser_id){ return mapper.selectOutbound(webuser_id); }
     public List<BoundDTO> adminBound(){ return mapper.adminBound(); }
     public List<BoundDTO> userBound(int webuser_id){ return mapper.userBound(webuser_id); }
-    public int approvalIn(ApprovalDTO dto){ return mapper.approvalIn(dto); }
-    public int approvalOut(ApprovalDTO dto){ return mapper.approvalOut(dto); }
+    public boolean approvalIn(int approver_id,int inbound_id,String approval_status){
+        Map<String,Object> map=new HashMap<>();
+        map.put("approver_id",approver_id);
+        map.put("inbound_id",inbound_id);
+        map.put("approval_status",approval_status);
+        return mapper.approvalIn(map) > 0;
+    }
+
+    public boolean approvalOut(int approver_id,int outbound_id,String approval_status){
+        Map<String,Object> map=new HashMap<>();
+        map.put("approver_id",approver_id);
+        map.put("outbound_id",outbound_id);
+        map.put("approval_status",approval_status);
+        return mapper.approvalOut(map) > 0;
+    }
+
+    public boolean rejectionIn(int approver_id,int inbound_id, String reason,String approval_status) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("approver_id", approver_id);
+        map.put("inbound_id", inbound_id);
+        map.put("reason", reason);
+        map.put("approval_status", approval_status);
+        return mapper.rejectionIn(map) > 0;
+    }
+
+    public boolean rejectionOut(int approver_id,int outbound_id, String reason,String approval_status){
+        Map<String,Object> map=new HashMap<>();
+        map.put("approver_id",approver_id);
+        map.put("outbound_id",outbound_id);
+        map.put("reason",reason);
+        map.put("approval_status",approval_status);
+        return mapper.approvalOut(map) > 0;
+    }
+    public boolean inboundDetailStatus(int inbound_detail_id,String approval_status){
+        Map<String,Object> map=new HashMap<>();
+        map.put("inbound_detail_id",inbound_detail_id);
+        map.put("approval_status",approval_status);
+        return mapper.inboundDetailStatus(map) > 0;
+    }
+    public boolean outboundDetailStatus(int outbound_detail_id,String approval_status){
+        Map<String,Object> map=new HashMap<>();
+        map.put("outbound_detail_id",outbound_detail_id);
+        map.put("approval_status",approval_status);
+        return mapper.outboundDetailStatus(map) > 0;
+    }
+
+    public boolean inboundStatus(int inbound_id,String approval_status){
+        Map<String,Object> map=new HashMap<>();
+        map.put("inbound_id",inbound_id);
+        map.put("approval_status",approval_status);
+        return mapper.inboundStatus(map) > 0;
+    }
+
+    public boolean outboundStatus(int outbound_id,String approval_status){
+        Map<String,Object> map=new HashMap<>();
+        map.put("outbound_id",outbound_id);
+        map.put("approval_status",approval_status);
+        return mapper.outboundStatus(map) > 0;
+    }
+
+    public InboundDTO selectInboundId(int inbound_id){
+        return mapper.selectInboundId(inbound_id);
+    }
+
+    public OutboundDTO selectOutboundId(int outbound_id){
+        return mapper.selectOutboundId(outbound_id);
+    }
 }
