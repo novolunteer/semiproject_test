@@ -14,7 +14,7 @@
             <div class="loginArea">
                 <p th:if="${session.roleMsg != null}" th:text="${session.roleMsg}"></p>
                 <ul>
-                    <li th:if="${session.webuser_id != null}"><button onclick="logout()">logout</button></li>
+                    <li th:if="${session.webuser_id != null}"><button type="button" onclick="logout()">logout</button></li>
                 </ul>
             </div>
         </div>
@@ -40,7 +40,7 @@
                     </p>
                 </td>
                 <td th:if="${l.bound_type == 'out'}">
-                    <p th:text="|${l.approval_id} 승인자:
+                    <p th:text="|[${l.approval_id}] 승인자:
                     ${l.approver_id} ${l.bound_type}:
                     ${l.outbound_id}|"></p>
                     <p th:text="${l.approval_status}">
@@ -53,4 +53,14 @@
     </div>
 </div>
 </body>
+<script>
+    function logout(){
+        fetch('/logout')
+            .then(resp=>resp.text())
+            .then(data=>{
+                alert(data);
+                location.href="/";
+            })
+    }
+</script>
 </html>

@@ -49,9 +49,15 @@
 
     tr.innerHTML=`
                   <td colspan="${colCount}">
-                    <textarea name="reason"
-                    cols="50" rows="5" placeholder="반려 사유를 입력하시오."></textarea><br>
-                    <a href="/request/approval">확인</a>
+                  <form action="/request/rejectionIn" method="post">
+                     <input type="hidden" name="inbound_detail_id"
+                     value="${currentTr.children[0].innerText}">
+                     <input type="hidden" name="inbound_id"
+                     value="${currentTr.children[1].innerText}">
+                     <textarea name="reason"
+                      cols="50" rows="5" placeholder="반려 사유를 입력하시오."></textarea><br>
+                     <button type="submit">확인</button>
+                  </form>
                   </td>
                   `;
 

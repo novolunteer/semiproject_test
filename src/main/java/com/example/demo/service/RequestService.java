@@ -42,7 +42,7 @@ public class RequestService {
         return mapper.approvalOut(map) > 0;
     }
 
-    public boolean rejectionIn(int approver_id,int inbound_id, String reason,String approval_status) {
+    public boolean rejectionIn(int approver_id,int inbound_id, String approval_status, String reason) {
         Map<String, Object> map = new HashMap<>();
         map.put("approver_id", approver_id);
         map.put("inbound_id", inbound_id);
@@ -51,13 +51,13 @@ public class RequestService {
         return mapper.rejectionIn(map) > 0;
     }
 
-    public boolean rejectionOut(int approver_id,int outbound_id, String reason,String approval_status){
+    public boolean rejectionOut(int approver_id,int outbound_id, String approval_status, String reason){
         Map<String,Object> map=new HashMap<>();
         map.put("approver_id",approver_id);
         map.put("outbound_id",outbound_id);
         map.put("reason",reason);
         map.put("approval_status",approval_status);
-        return mapper.approvalOut(map) > 0;
+        return mapper.rejectionOut(map) > 0;
     }
     public boolean inboundDetailStatus(int inbound_detail_id,String approval_status){
         Map<String,Object> map=new HashMap<>();

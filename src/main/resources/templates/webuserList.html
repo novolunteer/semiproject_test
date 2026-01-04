@@ -14,7 +14,7 @@
             <div class="loginArea">
                 <p th:if="${session.roleMsg != null}" th:text="${session.roleMsg}"></p>
                 <ul>
-                    <li th:if="${session.webuser_id != null}"><button onclick="logout()">logout</button></li>
+                    <li th:if="${session.webuser_id != null}"><button type="button" onclick="logout()">logout</button></li>
                 </ul>
             </div>
         </div>
@@ -24,6 +24,7 @@
             <li th:if="${session.webuser_id != null && session.role_id == 2}"><a th:href="@{/main}">입출고 요청 내역</a></li>
             <li th:if="${session.webuser_id != null && session.role_id == 1}"><a th:href="@{/main}">입출고 요청 승인</a></li>
             <li th:if="${session.webuser_id != null && session.role_id == 1}"><a th:href="@{/webuser/list}">계정 관리</a></li>
+            <li th:if="${session.webuser_id != null && session.role_id == 1}"><a th:href="@{/approval/list}">승인 내역</a></li>
         </ul>
     </div>
     <div class="main">
@@ -85,6 +86,15 @@
 </div>
 </body>
 <script th:inline="javascript">
+    function logout(){
+        fetch('/logout')
+            .then(resp=>resp.text())
+            .then(data=>{
+                alert(data);
+                location.href="/";
+            })
+    }
+
     function insertWebuser(){
         location.href="/webuser/insert";
     }
