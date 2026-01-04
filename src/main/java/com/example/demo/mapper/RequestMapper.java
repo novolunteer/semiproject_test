@@ -26,5 +26,6 @@ public interface RequestMapper {
     int outboundStatus(Map<String,Object> map);
     InboundDTO selectInboundId(int inbound_id);
     OutboundDTO selectOutboundId(int Outbound_id);
+    List<ApprovalDTO> approvalAll();
 
 }

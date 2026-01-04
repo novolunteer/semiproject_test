@@ -1,14 +1,18 @@
 package com.example.demo.controller.request;
 
+import com.example.demo.dto.ApprovalDTO;
 import com.example.demo.dto.InboundDTO;
 import com.example.demo.service.RequestService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,5 +57,12 @@ public class ApprovalController {
             r.addFlashAttribute("msg","입고 요청 승인 실패!");
             return "redirect:/main";
         }
+    }
+
+    @GetMapping("/approval/list")
+    public String approvalList(Model model){
+        List<ApprovalDTO> list=service.approvalAll();
+        model.addAttribute("list",list);
+        return "approvalList";
     }
 }

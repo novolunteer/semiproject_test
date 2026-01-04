@@ -113,4 +113,8 @@
     <update id="outboundStatus" parameterType="map">
         update outbound set approval_status=#{approval_status} where outbound_id=#{outbound_id}
     </update>
+    <select id="approvalAll" resultType="ApprovalDTO">
+        select * from approval
+        order by approval_id desc
+    </select>
 </mapper>

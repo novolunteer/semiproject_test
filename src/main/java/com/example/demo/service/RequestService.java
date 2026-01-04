@@ -93,4 +93,8 @@ public class RequestService {
     public OutboundDTO selectOutboundId(int outbound_id){
         return mapper.selectOutboundId(outbound_id);
     }
+
+    public List<ApprovalDTO> approvalAll(){
+        return mapper.approvalAll();
+    }
 }
