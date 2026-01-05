@@ -5,14 +5,16 @@ import com.example.demo.service.RequestService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,36 +28,61 @@ public class ApprovalController {
                              RedirectAttributes r){
         int approver_id = (int) session.getAttribute("webuser_id");
         String approval_status="approved";
-        boolean result= service.approvalIn(approver_id,inbound_id,approval_status);
-        if(result){
-            boolean result2=service.inboundDetailStatus(inbound_detail_id,approval_status);
+
+        ApprovalDTO dto=service.selectApprovalIn(inbound_id);
+        if(dto != null){
+            boolean result2=service.inboundDetailStatus(inbound_detail_id,approval_status,null);
             if(result2){
-                InboundDTO dto=service.selectInboundId(inbound_id);
-                if(dto.getApproval_status().equals("request")){
-                    boolean result3=service.inboundStatus(inbound_id,approval_status);
-                    if(result3){
-                        r.addFlashAttribute("status","sucess");
-                        r.addFlashAttribute("msg","입고 요청 승인 성공!");
-                        return "redirect:/main";
-                    }else {
-                        r.addFlashAttribute("status","failure");
-                        r.addFlashAttribute("msg","입고 요청 승인 후 상태 변경 실패!");
-                        return "redirect:/main";
+                List<InboundDetailDTO> list=service.inboundList(inbound_id);
+                int count=0;
+                int a=list.size();
+                for(InboundDetailDTO d:list){
+                    if("approved".equals(d.getApproval_status())){
+                        count++;
                     }
-                }else {
-                    r.addFlashAttribute("status","sucess");
-                    r.addFlashAttribute("msg","입고 요청 승인 성공!");
-                    return "redirect:/main";
                 }
+                if(a > 0 && count == a){
+                    service.inboundStatus(inbound_id,approval_status);
+                }
+
+                r.addFlashAttribute("status","sucess");
+                r.addFlashAttribute("msg","입고 요청 승인 성공!");
+                return "redirect:/main";
             }else {
                 r.addFlashAttribute("status","failure");
                 r.addFlashAttribute("msg","입고 요청 승인 후 상태 변경 실패!");
                 return "redirect:/main";
             }
         }else {
-            r.addFlashAttribute("status","failure");
-            r.addFlashAttribute("msg","입고 요청 승인 실패!");
-            return "redirect:/main";
+            boolean result= service.approvalIn(approver_id,inbound_id,approval_status);
+            if(result){
+                boolean result2=service.inboundDetailStatus(inbound_detail_id,approval_status,null);
+                if(result2){
+                    List<InboundDetailDTO> list=service.inboundList(inbound_id);
+                    int count=0;
+                    int a=list.size();
+                    for(InboundDetailDTO d:list){
+                        if("approved".equals(d.getApproval_status())){
+                            count++;
+                        }
+                    }
+                    if(a > 0 && count == a){
+                        service.inboundStatus(inbound_id,approval_status);
+                    }
+
+                    r.addFlashAttribute("status","sucess");
+                    r.addFlashAttribute("msg","입고 요청 승인 성공!");
+                    return "redirect:/main";
+                }else {
+                    r.addFlashAttribute("status","failure");
+                    r.addFlashAttribute("msg","입고 요청 승인 후 상태 변경 실패!");
+                    return "redirect:/main";
+                }
+            }else {
+                r.addFlashAttribute("status","failure");
+                r.addFlashAttribute("msg","입고 요청 승인 실패!");
+                return "redirect:/main";
+            }
         }
     }
 
@@ -66,38 +93,62 @@ public class ApprovalController {
                               RedirectAttributes r){
         int approver_id = (int) session.getAttribute("webuser_id");
         String approval_status="approved";
-        boolean result= service.approvalOut(approver_id,outbound_id,approval_status);
-        if(result){
-            boolean result2=service.outboundDetailStatus(outbound_detail_id,approval_status);
+
+        ApprovalDTO dto=service.selectApprovalOut(outbound_id);
+        if(dto != null){
+            boolean result2=service.outboundDetailStatus(outbound_detail_id,approval_status,null);
             if(result2){
-                OutboundDTO dto=service.selectOutboundId(outbound_id);
-                if(dto.getApproval_status().equals("request")){
-                    boolean result3=service.outboundStatus(outbound_id,approval_status);
-                    if(result3){
-                        r.addFlashAttribute("status","sucess");
-                        r.addFlashAttribute("msg","출고 요청 승인 성공!");
-                        return "redirect:/main";
-                    }else {
-                        r.addFlashAttribute("status","failure");
-                        r.addFlashAttribute("msg","출고 요청 승인 후 상태 변경 실패!");
-                        return "redirect:/main";
+                List<OutboundDetailDTO> list=service.outboundList(outbound_id);
+                int count=0;
+                int a=list.size();
+                for(OutboundDetailDTO d:list){
+                    if("approved".equals(d.getApproval_status())){
+                        count++;
                     }
-                }else {
-                    r.addFlashAttribute("status","sucess");
-                    r.addFlashAttribute("msg","출고 요청 승인 성공!");
-                    return "redirect:/main";
                 }
+                if(a > 0 && count == a){
+                    service.outboundStatus(outbound_id,approval_status);
+                }
+
+                r.addFlashAttribute("status","sucess");
+                r.addFlashAttribute("msg","출고 요청 승인 성공!");
+                return "redirect:/main";
             }else {
                 r.addFlashAttribute("status","failure");
                 r.addFlashAttribute("msg","출고 요청 승인 후 상태 변경 실패!");
                 return "redirect:/main";
             }
         }else {
-            r.addFlashAttribute("status","failure");
-            r.addFlashAttribute("msg","출고 요청 승인 실패!");
-            return "redirect:/main";
-        }
+            boolean result= service.approvalOut(approver_id,outbound_id,approval_status);
+            if(result){
+                boolean result2=service.outboundDetailStatus(outbound_detail_id,approval_status,null);
+                if(result2){
+                    List<OutboundDetailDTO> list=service.outboundList(outbound_id);
+                    int count=0;
+                    int a=list.size();
+                    for(OutboundDetailDTO d:list){
+                        if("approved".equals(d.getApproval_status())){
+                            count++;
+                        }
+                    }
+                    if(a > 0 && count == a){
+                        service.outboundStatus(outbound_id,approval_status);
+                    }
 
+                    r.addFlashAttribute("status","sucess");
+                    r.addFlashAttribute("msg","출고 요청 승인 성공!");
+                    return "redirect:/main";
+                }else {
+                    r.addFlashAttribute("status","failure");
+                    r.addFlashAttribute("msg","출고 요청 승인 후 상태 변경 실패!");
+                    return "redirect:/main";
+                }
+            }else {
+                r.addFlashAttribute("status","failure");
+                r.addFlashAttribute("msg","출고 요청 승인 실패!");
+                return "redirect:/main";
+            }
+        }
     }
 
     @PostMapping("/request/rejectionIn")
@@ -108,34 +159,74 @@ public class ApprovalController {
                               RedirectAttributes r){
         int approver_id = (int) session.getAttribute("webuser_id");
         String approval_status="rejected";
-        boolean result=service.rejectionIn(approver_id,inbound_id,approval_status,reason);
-        if(result){
-            boolean result2=service.inboundDetailStatus(inbound_detail_id,approval_status);
-            if(result2){
-                List<InboundDetailDTO> list=service.inboundList(inbound_id);
-                int count=0;
-                int a=list.size();
-                for(InboundDetailDTO dto:list){
-                    if("rejected".equals(dto.getApproval_status())){
-                        count++;
-                    }
-                }
-                if(a > 0 && count == a){
-                    service.inboundStatus(inbound_id,approval_status);
-                }
 
-                r.addFlashAttribute("status","success");
-                r.addFlashAttribute("msg","입고 요청 반려 성공!");
-                return "redirect:/main";
+        ApprovalDTO dto=service.selectApprovalIn(inbound_id);
+        if(dto != null){
+
+            boolean update=service.updateApprovalIn(inbound_id);
+
+            if(update){
+                boolean result2=service.inboundDetailStatus(inbound_detail_id,approval_status,reason);
+                if(result2){
+                    InboundDTO d=service.selectInboundId(inbound_id);
+                    if(!"rejected".equals(d.getApproval_status())){
+                        boolean result3=service.inboundStatus(inbound_id,approval_status);
+                        if(result3){
+                            r.addFlashAttribute("status","success");
+                            r.addFlashAttribute("msg","입고 요청 반려 성공!");
+                            return "redirect:/main";
+                        }else {
+                            r.addFlashAttribute("status","failure");
+                            r.addFlashAttribute("msg","입고 요청 반려 후 상태 변경 실패!");
+                            return "redirect:/main";
+                        }
+                    }else {
+                        r.addFlashAttribute("status","success");
+                        r.addFlashAttribute("msg","입고 요청 반려 성공!");
+                        return "redirect:/main";
+                    }
+                }else {
+                    r.addFlashAttribute("status","failure");
+                    r.addFlashAttribute("msg","입고 요청 반려 후 상태 변경 실패!");
+                    return "redirect:/main";
+                }
             }else {
                 r.addFlashAttribute("status","failure");
-                r.addFlashAttribute("msg","입고 요청 반려 후 상태 변경 실패!");
+                r.addFlashAttribute("msg","입고 요청 반려 실패!");
                 return "redirect:/main";
             }
         }else {
-            r.addFlashAttribute("status","failure");
-            r.addFlashAttribute("msg","입고 요청 반려 실패!");
-            return "redirect:/main";
+            boolean result=service.rejectionIn(approver_id,inbound_id,approval_status);
+            if(result){
+                boolean result2=service.inboundDetailStatus(inbound_detail_id,approval_status,reason);
+                if(result2){
+                    InboundDTO d=service.selectInboundId(inbound_id);
+                    if(!"rejected".equals(d.getApproval_status())){
+                        boolean result3=service.inboundStatus(inbound_id,approval_status);
+                        if(result3){
+                            r.addFlashAttribute("status","success");
+                            r.addFlashAttribute("msg","입고 요청 반려 성공!");
+                            return "redirect:/main";
+                        }else {
+                            r.addFlashAttribute("status","failure");
+                            r.addFlashAttribute("msg","입고 요청 반려 후 상태 변경 실패!");
+                            return "redirect:/main";
+                        }
+                    }else {
+                        r.addFlashAttribute("status","success");
+                        r.addFlashAttribute("msg","입고 요청 반려 성공!");
+                        return "redirect:/main";
+                    }
+                }else {
+                    r.addFlashAttribute("status","failure");
+                    r.addFlashAttribute("msg","입고 요청 반려 후 상태 변경 실패!");
+                    return "redirect:/main";
+                }
+            }else {
+                r.addFlashAttribute("status","failure");
+                r.addFlashAttribute("msg","입고 요청 반려 실패!");
+                return "redirect:/main";
+            }
         }
     }
 
@@ -147,34 +238,73 @@ public class ApprovalController {
                               RedirectAttributes r){
         int approver_id = (int) session.getAttribute("webuser_id");
         String approval_status="rejected";
-        boolean result=service.rejectionOut(approver_id,outbound_id,reason,approval_status);
-        if(result){
-            boolean result2=service.outboundDetailStatus(outbound_detail_id,approval_status);
-            if(result2){
-                List<OutboundDetailDTO> list=service.outboundList(outbound_id);
-                int count=0;
-                int a=list.size();
-                for(OutboundDetailDTO dto:list){
-                    if("rejected".equals(dto.getApproval_status())){
-                        count++;
-                    }
-                }
-                if(a > 0 && count == a){
-                    service.outboundStatus(outbound_id,approval_status);
-                }
 
-                r.addFlashAttribute("status","success");
-                r.addFlashAttribute("msg","출고 요청 반려 성공!");
-                return "redirect:/main";
+        ApprovalDTO dto=service.selectApprovalOut(outbound_id);
+        if(dto != null){
+
+            boolean update=service.updateApprovalOut(outbound_id);
+            if(update){
+                boolean result2=service.outboundDetailStatus(outbound_detail_id,approval_status,reason);
+                if(result2){
+                    OutboundDTO d=service.selectOutboundId(outbound_id);
+                    if(!"rejected".equals(d.getApproval_status())){
+                        boolean result3=service.outboundStatus(outbound_id,approval_status);
+                        if(result3){
+                            r.addFlashAttribute("status","success");
+                            r.addFlashAttribute("msg","출고 요청 반려 성공!");
+                            return "redirect:/main";
+                        }else {
+                            r.addFlashAttribute("status","failure");
+                            r.addFlashAttribute("msg","출고 요청 반려 후 상태 변경 실패!");
+                            return "redirect:/main";
+                        }
+                    }else {
+                        r.addFlashAttribute("status","success");
+                        r.addFlashAttribute("msg","출고 요청 반려 성공!");
+                        return "redirect:/main";
+                    }
+                }else {
+                    r.addFlashAttribute("status","failure");
+                    r.addFlashAttribute("msg","출고 요청 반려 후 상태 변경 실패!");
+                    return "redirect:/main";
+                }
             }else {
                 r.addFlashAttribute("status","failure");
-                r.addFlashAttribute("msg","출고 요청 반려 후 상태 변경 실패!");
+                r.addFlashAttribute("msg","출고 요청 반려 실패!");
                 return "redirect:/main";
             }
         }else {
-            r.addFlashAttribute("status","failure");
-            r.addFlashAttribute("msg","출고 요청 반려 실패!");
-            return "redirect:/main";
+            boolean result=service.rejectionOut(approver_id,outbound_id,approval_status);
+            if(result){
+                boolean result2=service.outboundDetailStatus(outbound_detail_id,approval_status,reason);
+                if(result2){
+                    OutboundDTO d=service.selectOutboundId(outbound_id);
+                    if(!"rejected".equals(d.getApproval_status())){
+                        boolean result3=service.outboundStatus(outbound_id,approval_status);
+                        if(result3){
+                            r.addFlashAttribute("status","success");
+                            r.addFlashAttribute("msg","출고 요청 반려 성공!");
+                            return "redirect:/main";
+                        }else {
+                            r.addFlashAttribute("status","failure");
+                            r.addFlashAttribute("msg","출고 요청 반려 후 상태 변경 실패!");
+                            return "redirect:/main";
+                        }
+                    }else {
+                        r.addFlashAttribute("status","success");
+                        r.addFlashAttribute("msg","출고 요청 반려 성공!");
+                        return "redirect:/main";
+                    }
+                }else {
+                    r.addFlashAttribute("status","failure");
+                    r.addFlashAttribute("msg","출고 요청 반려 후 상태 변경 실패!");
+                    return "redirect:/main";
+                }
+            }else {
+                r.addFlashAttribute("status","failure");
+                r.addFlashAttribute("msg","출고 요청 반려 실패!");
+                return "redirect:/main";
+            }
         }
     }
 
@@ -183,5 +313,26 @@ public class ApprovalController {
         List<ApprovalDTO> list=service.approvalAll();
         model.addAttribute("list",list);
         return "approvalList";
+    }
+
+    @GetMapping("/approval/detailList")
+    @ResponseBody
+    public Object approvalDetailList(@RequestParam String bound_type,
+                                     @RequestParam int bound_id){
+        if("in".equals(bound_type)){
+            List<InboundDetailDTO> list=service.inboundList(bound_id);
+            return list;
+        }else {
+            List<OutboundDetailDTO> list=service.outboundList(bound_id);
+            return list;
+        }
+    }
+
+    @GetMapping("/approval/showReason")
+    public String showReason(@RequestParam String bound_type,
+                             @RequestParam int bound_id){
+        if("in".equals(bound_type)){
+            InboundDetailDTO dto=service.selectInboundId()
+        }
     }
 }

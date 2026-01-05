@@ -42,33 +42,33 @@ public class RequestService {
         return mapper.approvalOut(map) > 0;
     }
 
-    public boolean rejectionIn(int approver_id,int inbound_id, String approval_status, String reason) {
+    public boolean rejectionIn(int approver_id,int inbound_id, String approval_status) {
         Map<String, Object> map = new HashMap<>();
         map.put("approver_id", approver_id);
         map.put("inbound_id", inbound_id);
-        map.put("reason", reason);
         map.put("approval_status", approval_status);
         return mapper.rejectionIn(map) > 0;
     }
 
-    public boolean rejectionOut(int approver_id,int outbound_id, String approval_status, String reason){
+    public boolean rejectionOut(int approver_id,int outbound_id, String approval_status){
         Map<String,Object> map=new HashMap<>();
         map.put("approver_id",approver_id);
         map.put("outbound_id",outbound_id);
-        map.put("reason",reason);
         map.put("approval_status",approval_status);
         return mapper.rejectionOut(map) > 0;
     }
-    public boolean inboundDetailStatus(int inbound_detail_id,String approval_status){
+    public boolean inboundDetailStatus(int inbound_detail_id,String approval_status,String reason){
         Map<String,Object> map=new HashMap<>();
         map.put("inbound_detail_id",inbound_detail_id);
         map.put("approval_status",approval_status);
+        map.put("reason",reason);
         return mapper.inboundDetailStatus(map) > 0;
     }
-    public boolean outboundDetailStatus(int outbound_detail_id,String approval_status){
+    public boolean outboundDetailStatus(int outbound_detail_id,String approval_status,String reason){
         Map<String,Object> map=new HashMap<>();
         map.put("outbound_detail_id",outbound_detail_id);
         map.put("approval_status",approval_status);
+        map.put("reason",reason);
         return mapper.outboundDetailStatus(map) > 0;
     }
 
@@ -96,5 +96,21 @@ public class RequestService {
 
     public List<ApprovalDTO> approvalAll(){
         return mapper.approvalAll();
+    }
+
+    public ApprovalDTO selectApprovalIn(int inbound_id){
+        return mapper.selectApprovalIn(inbound_id);
+    }
+
+    public ApprovalDTO selectApprovalOut(int outbound_id){
+        return mapper.selectApprovalOut(outbound_id);
+    }
+
+    public boolean updateApprovalIn(int inbound_id){
+        return mapper.updateApprovalIn(inbound_id) > 0;
+    }
+
+    public boolean updateApprovalOut(int outbound_id){
+        return mapper.updateApprovalOut(outbound_id) > 0;
     }
 }

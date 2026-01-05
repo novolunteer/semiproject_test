@@ -5,11 +5,11 @@
 <mapper namespace="com.example.demo.mapper.RequestMapper">
     <!-- 관리자용 입고 요청 내역 -->
     <select id="inboundAll" resultType="InboundDTO">
-        select * from inbound
+        select * from inbound order by inbound_id desc
     </select>
     <!-- 관리자용 출고 요청 내역 -->
     <select id="outboundAll" resultType="OutboundDTO">
-        select * from outbound
+        select * from outbound order by outbound_id desc
     </select>
     <!-- 관리자용 입출고 요청 전체 내역 -->
     <select id="adminBound" resultType="BoundDTO">
@@ -83,16 +83,17 @@
     </select>
     <!-- 관리자 입고 승인 내역 추가 -->
     <insert id="approvalIn" parameterType="map">
-        insert into approval values(approval_seq.nextval,#{approver_id},'in',#{inbound_id},null,#{approval_status},
-        null,sysdate)
+        insert into approval values(approval_seq.nextval,#{approver_id},'in',#{inbound_id},null,#{approval_status}
+        ,sysdate)
     </insert>
     <!-- 관리자 입고 반려 내역 추가 -->
     <insert id="rejectionIn" parameterType="map">
         insert into approval values(approval_seq.nextval,#{approver_id},'in',#{inbound_id},null,#{approval_status},
-        #{reason},sysdate)
+        sysdate)
     </insert>
     <update id="inboundDetailStatus" parameterType="map">
-        update inbound_detail set approval_status=#{approval_status} where inbound_detail_id=#{inbound_detail_id}
+        update inbound_detail set approval_status=#{approval_status}, reason=#{reason, jdbcType=VARCHAR}
+        where inbound_detail_id=#{inbound_detail_id}
     </update>
     <update id="inboundStatus" parameterType="map">
         update inbound set approval_status=#{approval_status} where inbound_id=#{inbound_id}
@@ -100,15 +101,16 @@
     <!-- 관리자 출고 승인 내역 추가 -->
     <insert id="approvalOut" parameterType="map">
         insert into approval values(approval_seq.nextval,#{approver_id},'out',null,#{outbound_id},#{approval_status},
-        null,sysdate)
+        sysdate)
     </insert>
     <!-- 관리자 출고 반려 내역 추가 -->
     <insert id="rejectionOut" parameterType="map">
         insert into approval values(approval_seq.nextval,#{approver_id},'out',null,#{outbound_id},#{approval_status},
-        #{reason},sysdate)
+        sysdate)
     </insert>
     <update id="outboundDetailStatus" parameterType="map">
-        update outbound_detail set approval_status=#{approval_status} where outbound_detail_id=#{outbound_detail_id}
+        update outbound_detail set approval_status=#{approval_status}, reason=#{reason, jdbcType=VARCHAR}
+        where outbound_detail_id=#{outbound_detail_id}
     </update>
     <update id="outboundStatus" parameterType="map">
         update outbound set approval_status=#{approval_status} where outbound_id=#{outbound_id}
@@ -117,4 +119,17 @@
         select * from approval
         order by approval_id desc
     </select>
+    <select id="selectApprovalIn" parameterType="int" resultType="ApprovalDTO">
+        select * from approval where bound_type='in' and inbound_id=#{inbound_id}
+    </select>
+    <select id="selectApprovalOut" parameterType="int" resultType="ApprovalDTO">
+        select * from approval where bound_type='out' and outbound_id=#{outbound_id}
+    </select>
+    <!-- 승인된 상품이 있는 요청 건에 반려 상품이 추가되었을 때 승인 상태 수정하기 -->
+    <update id="updateApprovalIn" parameterType="int">
+        update approval set approval_status='rejected' where inbound_id=#{inbound_id}
+    </update>
+    <update id="updateApprovalOut" parameterType="int">
+        update approval set approval_status='rejected' where outbound_id=#{outbound_id}
+    </update>
 </mapper>

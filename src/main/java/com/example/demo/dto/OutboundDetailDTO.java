@@ -14,4 +14,5 @@ public class OutboundDetailDTO {
     private String approval_status;
     private String outbound_status;
     private int quantity;
+    private String reason;
 }

@@ -15,4 +15,5 @@ public class InboundDetailDTO {
     private String approval_status;
     private String inbound_status;
     private int quantity;
+    private String reason;
 }

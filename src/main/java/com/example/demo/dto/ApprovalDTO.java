@@ -15,6 +15,5 @@ public class ApprovalDTO {
     private int inbound_id;
     private int outbound_id;
     private String approval_status;
-    private String reason;
     private LocalDateTime created_at;
 }

@@ -27,5 +27,9 @@ public interface RequestMapper {
     InboundDTO selectInboundId(int inbound_id);
     OutboundDTO selectOutboundId(int Outbound_id);
     List<ApprovalDTO> approvalAll();
+    ApprovalDTO selectApprovalIn(int inbound_id);
+    ApprovalDTO selectApprovalOut(int outbound_id);
+    int updateApprovalIn(int inbound_id);
+    int updateApprovalOut(int outbound_id);
 
 }
