@@ -328,11 +328,11 @@ public class ApprovalController {
         }
     }
 
-    @GetMapping("/approval/showReason")
-    public String showReason(@RequestParam String bound_type,
-                             @RequestParam int bound_id){
-        if("in".equals(bound_type)){
-            InboundDetailDTO dto=service.selectInboundId()
-        }
-    }
+//    @GetMapping("/approval/showReason")
+//    public String showReason(@RequestParam String bound_type,
+//                             @RequestParam int bound_id){
+//        if("in".equals(bound_type)){
+//            InboundDetailDTO dto=service.selectInboundId()
+//        }
+//    }
 }
