@@ -113,4 +113,12 @@ public class RequestService {
     public boolean updateApprovalOut(int outbound_id){
         return mapper.updateApprovalOut(outbound_id) > 0;
     }
+
+    public InboundDetailDTO selectDetailIn(int inbound_detail_id){
+        return mapper.selectDetailIn(inbound_detail_id);
+    }
+
+    public OutboundDetailDTO selectDetailOut(int outbound_detail_id){
+        return mapper.selectDetailOut(outbound_detail_id);
+    }
 }

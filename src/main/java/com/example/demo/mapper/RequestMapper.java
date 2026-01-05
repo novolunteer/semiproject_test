@@ -31,5 +31,7 @@ public interface RequestMapper {
     ApprovalDTO selectApprovalOut(int outbound_id);
     int updateApprovalIn(int inbound_id);
     int updateApprovalOut(int outbound_id);
+    InboundDetailDTO selectDetailIn(int inbound_detail_id);
+    OutboundDetailDTO selectDetailOut(int outbound_detail_id);
 
 }

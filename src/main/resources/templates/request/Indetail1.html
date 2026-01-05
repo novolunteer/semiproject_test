@@ -18,7 +18,11 @@
       <tr th:each="dto:${list}">
         <td th:text="${dto.inbound_detail_id}"></td><td th:text="${dto.inbound_id}"></td>
         <td th:text="${dto.product_id}"></td><td th:text="${dto.warehouse_id}"></td>
-        <td th:text="${dto.quantity}"></td><td th:text="${dto.approval_status}"></td>
+        <td th:text="${dto.quantity}"></td>
+        <td>[[${dto.approval_status}]]
+          <button th:if="${dto.approval_status == 'rejected'}"
+                  th:onclick="|showReason('in',${dto.inbound_detail_id},this)|">
+            사유 보기</button></td>
       </tr>
     </table>
     <div id="reasonBox">
@@ -27,5 +31,33 @@
   <div class="footer">
   </div>
 </div>
+<script>
+  function showReason(bound_type,detail_id,btn){
+    const currentTr=btn.closest("tr");
+
+    // 이미 사유 row 있으면 토글
+    if(currentTr.nextElementSibling &&
+            currentTr.nextElementSibling.classList.contains("reasonRow")){
+      currentTr.nextElementSibling.remove();
+      return;
+    }
+
+    fetch(`/approval/showReason?detail_id=${detail_id}&bound_type=${bound_type}`)
+            .then(resp=>resp.text())
+            .then(reason=>{
+
+              const tr=document.createElement("tr");
+              tr.className="reasonRow";
+
+              tr.innerHTML= `
+                                <td colspan="6">
+                                    ${reason}
+                                </td>
+                              `;
+
+              currentTr.after(tr);
+            })
+  }
+</script>
 </body>
 </html>

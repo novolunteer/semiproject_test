@@ -67,11 +67,11 @@
     </select>
     <!-- 직원용 출고 요청 내역 -->
     <select id="selectOutbound" parameterType="int" resultType="OutboundDTO">
-        select * from outbound where webuser_id=#{value}
+        select * from outbound where webuser_id=#{value} order by outbound_id desc
     </select>
     <!-- 직원용 입고 요청 내역 -->
     <select id="selectInbound" parameterType="int" resultType="InboundDTO">
-        select * from inbound where webuser_id=#{value}
+        select * from inbound where webuser_id=#{value} order by inbound_id desc
     </select>
     <!-- 입고 상세 테이블 수정 후 입고 테이블 요청 상태 조회 -->
     <select id="selectInboundId" parameterType="int" resultType="InboundDTO">
@@ -132,4 +132,12 @@
     <update id="updateApprovalOut" parameterType="int">
         update approval set approval_status='rejected' where outbound_id=#{outbound_id}
     </update>
+    <!-- 입고 상세 번호별 정보 -->
+    <select id="selectDetailIn" parameterType="int" resultType="InboundDetailDTO">
+        select * from inbound_detail where inbound_detail_id=#{value}
+    </select>
+    <!-- 출고 상세 번호별 정보 -->
+    <select id="selectDetailOut" parameterType="int" resultType="OutboundDetailDTO">
+        select * from outbound_detail where outbound_detail_id=#{value}
+    </select>
 </mapper>

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -19,7 +20,8 @@ public class MainController {
     private final RequestService service;
 
     @GetMapping("/main")
-    public String main(HttpSession session, Model model){
+    public String main(HttpSession session, Model model,
+                       @RequestParam(name = "pageNum",defaultValue = "1") int pageNum){
         int role_id = (int) session.getAttribute("role_id");
         int webuser_id = (int) session.getAttribute("webuser_id");
         if(role_id == 1){

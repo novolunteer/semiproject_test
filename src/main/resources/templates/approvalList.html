@@ -81,9 +81,15 @@
 
                     let reasonBtn="";
 
-                    if(l.approval_status == 'rejected'){
+                    if(l.approval_status == 'rejected' && bound_type == 'in'){
                         reasonBtn = `
-                                      <button onclick="showReason(${bound_type},${bound_id})">사유 보기</button>
+                                      <button onclick="showReason('in',${l.inbound_detail_id},
+                                      this)">사유 보기</button>
+                                    `;
+                    }else if(l.approval_status == 'rejected' && bound_type == 'out'){
+                        reasonBtn = `
+                                      <button onclick="showReason('out',${l.outbound_detail_id},
+                                      this)">사유 보기</button>
                                     `;
                     }
 
@@ -113,8 +119,31 @@
                 });
     }
 
-    // function showReason(bound_type,bound_id){
-    //
-    // }
+    function showReason(bound_type,detail_id,btn){
+        const currentTr=btn.closest("tr");
+
+        // 이미 사유 row 있으면 토글
+        if(currentTr.nextElementSibling &&
+            currentTr.nextElementSibling.classList.contains("reasonRow")){
+            currentTr.nextElementSibling.remove();
+            return;
+        }
+
+        fetch(`/approval/showReason?detail_id=${detail_id}&bound_type=${bound_type}`)
+            .then(resp=>resp.text())
+            .then(reason=>{
+
+                const tr=document.createElement("tr");
+                tr.className="reasonRow";
+
+                tr.innerHTML= `
+                                <td colspan="3">
+                                    ${reason}
+                                </td>
+                              `;
+
+                currentTr.after(tr);
+            })
+    }
 </script>
 </html>
