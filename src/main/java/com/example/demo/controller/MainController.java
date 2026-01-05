@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,8 +26,10 @@ public class MainController {
         int role_id = (int) session.getAttribute("role_id");
         int webuser_id = (int) session.getAttribute("webuser_id");
         if(role_id == 1){
-            List<BoundDTO> list=service.adminBound();
-            model.addAttribute("list",list);
+            Map<String,Object> map=service.adminBound(pageNum);
+
+            model.addAttribute("list",map.get("list"));
+            model.addAttribute("pageInfo",map.get("pageInfo"));
             model.addAttribute("webuser_id",webuser_id);
             model.addAttribute("role_id",role_id);
         }else {
