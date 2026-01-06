@@ -46,28 +46,136 @@ public class RequestService {
     }
 
     // 사무직원 로그인 본인이 요청한 입출고 전체 내역
-    public List<BoundDTO> userBound(int webuser_id){
-        return mapper.userBound(webuser_id);
+    public Map<String,Object> userBound(int pageNum, int webuser_id){
+        Map<String,Object> map=new HashMap<>();
+        map.put("pageNum",pageNum);
+        map.put("webuser_id",webuser_id);
+
+        int totalRowCount = mapper.userCount(webuser_id);
+
+        PageInfo pageInfo=new PageInfo(pageNum,5,5,totalRowCount);
+
+        map.put("startRow",pageInfo.getStartRow());
+        map.put("endRow",pageInfo.getEndRow());
+
+        List<BoundDTO> list=mapper.userBound(map);
+
+        Map<String,Object> result=new HashMap<>();
+        result.put("list",list);
+        result.put("pageInfo",pageInfo);
+
+        return result;
+    }
+
+    // 직원 로그인 입출고 요청 페이징용 전체 요청 건수
+    public int userCount(int webuser_id){
+        return mapper.userCount(webuser_id);
     }
 
     // 관리자 로그인 입고 요청 내역
-    public List<InboundDTO> inboundAll(){
-        return mapper.inboundAll();
+    public Map<String,Object> inboundAll(int pageNum){
+        Map<String,Object> map=new HashMap<>();
+        map.put("pageNum",pageNum);
+
+        int totalRowCount = mapper.adminInboundCount();
+
+        PageInfo pageInfo=new PageInfo(pageNum,5,5,totalRowCount);
+
+        map.put("startRow",pageInfo.getStartRow());
+        map.put("endRow",pageInfo.getEndRow());
+
+        List<InboundDTO> list=mapper.inboundAll(map);
+
+        Map<String,Object> result=new HashMap<>();
+        result.put("list",list);
+        result.put("pageInfo",pageInfo);
+
+        return result;
+    }
+
+    // 관리자 로그인 - 입고 요청 페이징용 요청 건수
+    public int adminInboundCount(){
+        return mapper.adminInboundCount();
     }
 
     // 사무직원 로그인 본인이 요청한 입고 요청
-    public List<InboundDTO> selectInbound(int webuser_id){
-        return mapper.selectInbound(webuser_id);
+    public Map<String,Object> selectInbound(int pageNum, int webuser_id){
+        Map<String,Object> map=new HashMap<>();
+        map.put("pageNum",pageNum);
+        map.put("webuser_id",webuser_id);
+
+        int totalRowCount=mapper.userInboundCount(webuser_id);
+
+        PageInfo pageInfo=new PageInfo(pageNum,5,5,totalRowCount);
+
+        map.put("startRow",pageInfo.getStartRow());
+        map.put("endRow",pageInfo.getEndRow());
+
+        List<InboundDTO> list=mapper.selectInbound(map);
+
+        Map<String,Object> result=new HashMap<>();
+        result.put("list",list);
+        result.put("pageInfo",pageInfo);
+
+        return result;
+    }
+
+    // 직원 로그인 입고 요청 페이징용 전체 요청 건수
+    public int userInboundCount(int webuser_id){
+        return mapper.userInboundCount(webuser_id);
     }
 
     // 관리자 로그인 출고 요청 내역
-    public List<OutboundDTO> outbloundAll(){
-        return mapper.outboundAll();
+    public Map<String,Object> outboundAll(int pageNum){
+        Map<String,Object> map=new HashMap<>();
+        map.put("pageNum",pageNum);
+
+        int totalRowCount = mapper.adminOutboundCount();
+
+        PageInfo pageInfo=new PageInfo(pageNum,5,5,totalRowCount);
+
+        map.put("startRow",pageInfo.getStartRow());
+        map.put("endRow",pageInfo.getEndRow());
+
+        List<OutboundDTO> list=mapper.outboundAll(map);
+
+        Map<String,Object> result=new HashMap<>();
+        result.put("list",list);
+        result.put("pageInfo",pageInfo);
+
+        return result;
+    }
+
+    // 관리자 로그인 - 출고 요청 페이징용 요청 건수
+    public int adminOutboundCount(){
+        return mapper.adminOutboundCount();
     }
 
     // 사무직원 로그인 본인이 요청한 출고 요청
-    public List<OutboundDTO> selectOutbound(int webuser_id){
-        return mapper.selectOutbound(webuser_id);
+    public Map<String,Object> selectOutbound(int pageNum, int webuser_id){
+        Map<String,Object> map=new HashMap<>();
+        map.put("pageNum",pageNum);
+        map.put("webuser_id",webuser_id);
+
+        int totalRowCount=mapper.userOutboundCount(webuser_id);
+
+        PageInfo pageInfo=new PageInfo(pageNum,5,5,totalRowCount);
+
+        map.put("startRow",pageInfo.getStartRow());
+        map.put("endRow",pageInfo.getEndRow());
+
+        List<OutboundDTO> list=mapper.selectOutbound(map);
+
+        Map<String,Object> result=new HashMap<>();
+        result.put("list",list);
+        result.put("pageInfo",pageInfo);
+
+        return result;
+    }
+
+    // 직원 로그인 출고 요청 페이징용 전체 요청 건수
+    public int userOutboundCount(int webuser_id){
+        return mapper.userOutboundCount(webuser_id);
     }
 
     /* ===============================

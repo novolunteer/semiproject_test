@@ -32,4 +32,8 @@
     <delete id="deleteWebuser" parameterType="int">
         delete from webuser where webuser_id=#{value}
     </delete>
+    <!-- 아이디 중복 검사용 아이디 조회 -->
+    <select id="idCheck" parameterType="string" resultType="WebuserDTO">
+        select * from webuser where id=#{id}
+    </select>
 </mapper>

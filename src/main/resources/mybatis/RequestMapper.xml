@@ -9,7 +9,8 @@
 
     <!-- 관리자용 입출고 요청 전체 내역 -->
     <select id="adminBound" resultType="BoundDTO" parameterType="map">
-        select rownum rn,m.* from
+        select * from
+        (select rownum rn,m.* from
         (select
         'in' as io_type,
         i.inbound_id as io_id,
@@ -28,7 +29,7 @@
         o.approval_status
         from outbound o
 
-        order by request_date desc) m
+        order by request_date desc) m)
         <![CDATA[ where rn >=#{startRow} and rn <=#{endRow} ]]>
     </select>
 
@@ -57,8 +58,9 @@
     </select>
 
     <!-- 직원용 입출고 요청 전체 내역 -->
-    <select id="userBound" parameterType="int" resultType="BoundDTO">
+    <select id="userBound" parameterType="map" resultType="BoundDTO">
         select * from
+        (select rownum rn,m.* from
         (
         select
         'in' as io_type,
@@ -79,28 +81,93 @@
         from outbound o
 
         order by request_date desc
-        )
-        where webuser_id=#{value}
+        )m
+        where webuser_id=#{webuser_id})
+        <![CDATA[where rn>=#{startRow} and rn<=#{endRow}]]>
+    </select>
+
+    <!-- 직원 입출고 요청 페이징용 전체 요청 건수 -->
+    <select id="userCount" parameterType="int" resultType="int">
+        select NVL(count(*),0) from
+        (select rownum rn,m.* from
+        (
+        select
+        'in' as io_type,
+        i.inbound_id as io_id,
+        i.webuser_id,
+        i.request_date,
+        i.approval_status
+        from inbound i
+
+        union all
+
+        select
+        'out' as io_type,
+        o.outbound_id as io_id,
+        o.webuser_id,
+        o.request_date,
+        o.approval_status
+        from outbound o
+
+        order by request_date desc
+        )m
+        where webuser_id=#{webuser_id})
     </select>
 
     <!-- 관리자용 입고 요청 내역 -->
-    <select id="inboundAll" resultType="InboundDTO">
-        select * from inbound order by inbound_id desc
+    <select id="inboundAll" parameterType="map" resultType="InboundDTO">
+        select * from
+        (select rownum rn, m.* from
+        (select * from inbound
+        order by inbound_id desc) m)
+        <![CDATA[where rn>=#{startRow} and rn<=#{endRow}]]>
+    </select>
+
+    <!-- 관리자용 입고 요청 페이징용 입고 요청 건수 -->
+    <select id="adminInboundCount" resultType="int">
+        select NVL(count(*),0) from inbound
     </select>
 
     <!-- 직원용 입고 요청 내역 -->
-    <select id="selectInbound" parameterType="int" resultType="InboundDTO">
-        select * from inbound where webuser_id=#{value} order by inbound_id desc
+    <select id="selectInbound" parameterType="map" resultType="InboundDTO">
+        select * from
+        (select rownum rn,m.* from
+        (select * from inbound where webuser_id=#{webuser_id}
+        order by inbound_id desc) m)
+        <![CDATA[where rn>=#{startRow} and rn<=#{endRow}]]>
+    </select>
+
+    <!-- 직원 입고 요청 페이징용 입고 요청 건수 -->
+    <select id="userInboundCount" parameterType="int" resultType="int">
+        select NVL(count(*),0) from inbound where webuser_id=#{webuser_id}
     </select>
 
     <!-- 관리자용 출고 요청 내역 -->
     <select id="outboundAll" resultType="OutboundDTO">
-        select * from outbound order by outbound_id desc
+        select * from
+        (select rownum rn, m.* from
+        (select * from outbound
+        order by outbound_id desc) m)
+        <![CDATA[where rn>=#{startRow} and rn<=#{endRow}]]>
+    </select>
+
+    <!-- 관리자용 출고 요청 페이징용 출고 요청 건수 -->
+    <select id="adminOutboundCount" resultType="int">
+        select NVL(count(*),0) from outbound
     </select>
 
     <!-- 직원용 출고 요청 내역 -->
-    <select id="selectOutbound" parameterType="int" resultType="OutboundDTO">
-        select * from outbound where webuser_id=#{value} order by outbound_id desc
+    <select id="selectOutbound" parameterType="map" resultType="OutboundDTO">
+        select * from
+        (select rownum rn,m.* from
+        (select * from outbound where webuser_id=#{webuser_id}
+        order by outbound_id desc) m)
+        <![CDATA[where rn>=#{startRow} and rn<=#{endRow}]]>
+    </select>
+
+    <!-- 직원 출고 요청 페이징용 출고 요청 건수 -->
+    <select id="userOutboundCount" parameterType="int" resultType="int">
+        select NVL(count(*),0) from outbound where webuser_id=#{webuser_id}
     </select>
 
     <!-- ===============================

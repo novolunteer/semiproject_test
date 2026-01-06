@@ -13,10 +13,16 @@ public interface RequestMapper {
        ========================= */
 
     /** 관리자 로그인 - 입고 요청 전체 조회 */
-    List<InboundDTO> inboundAll();
+    List<InboundDTO> inboundAll(Map<String,Object> map);
+
+    /** 관리자 로그인 - 입고 요청 페이징용 전체 입고 요청 건수 **/
+    int adminInboundCount();
 
     /** 관리자 로그인 - 출고 요청 전체 조회 */
-    List<OutboundDTO> outboundAll();
+    List<OutboundDTO> outboundAll(Map<String,Object> map);
+
+    /** 관리자 로그인 - 출고 요청 페이징용 전체 출고 요청 건수 **/
+    int adminOutboundCount();
 
     /** 관리자 로그인 - 입출고 요청 전체 조회 */
     List<BoundDTO> adminBound(Map<String,Object> map);
@@ -25,13 +31,22 @@ public interface RequestMapper {
     int adminCount();
 
     /** 직원 로그인 - 본인이 요청한 입고 내역 조회 */
-    List<InboundDTO> selectInbound(int webuser_id);
+    List<InboundDTO> selectInbound(Map<String,Object> map);
+
+    /** 직원 로그인 - 입고 요청 건수 **/
+    int userInboundCount(int webuser_id);
 
     /** 직원 로그인 - 본인이 요청한 출고 내역 조회 */
-    List<OutboundDTO> selectOutbound(int webuser_id);
+    List<OutboundDTO> selectOutbound(Map<String,Object> map);
+
+    /** 직원 로그인 - 출고 요청 건수 **/
+    int userOutboundCount(int webuser_id);
 
     /** 직원 로그인 - 본인이 요청한 입출고 전체 내역 조회 */
-    List<BoundDTO> userBound(int webuser_id);
+    List<BoundDTO> userBound(Map<String,Object> map);
+
+    /** 직원 로그인 - 입출고 요청 건수 **/
+    int userCount(int webuser_id);
 
 
     /* =========================

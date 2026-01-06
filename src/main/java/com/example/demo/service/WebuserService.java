@@ -51,4 +51,8 @@ public class WebuserService {
     public boolean deleteWebuser(int webuser_id){
         return mapper.deleteWebuser(webuser_id) > 0;
     }
+
+    public WebuserDTO idCheck(String id){
+        return mapper.idCheck(id);
+    }
 }

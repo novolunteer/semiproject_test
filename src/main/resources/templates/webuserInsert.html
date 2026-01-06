@@ -11,7 +11,10 @@
     <form th:action="@{/webuser/insert}" method="post">
         <table>
             <tr>
-                <th>ID</th><td><input type="text" name="id"></td>
+                <th>ID</th><td>
+                            <input type="text" name="id" id="id"> <button type="button" onclick="idcheck()">중복 확인</button>
+                                <span id="span" style="color: red;font-size: 11px"></span>
+                           </td>
             </tr>
             <tr>
                 <th>PASSWORD</th><td><input type="password" name="password"></td>
@@ -36,4 +39,16 @@
         <input type="submit" value="추가">
     </form>
 </body>
+<script>
+    function idcheck(){
+        const id=document.getElementById("id").value;
+        const span=document.getElementById("span");
+
+        fetch(`/webuser/idcheck?id=${id}`)
+            .then(resp=>resp.text())
+            .then(data=>{
+                span.innerHTML=data;
+            })
+    }
+</script>
 </html>

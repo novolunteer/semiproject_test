@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -18,6 +20,19 @@ public class WebuserInsertController {
     @GetMapping("/webuser/insert")
     public String webuserInsert(){
         return "webuserInsert";
+    }
+
+    @GetMapping("/webuser/idcheck")
+    @ResponseBody
+    public String webuserIdcheck(@RequestParam String id){
+        WebuserDTO dto=service.idCheck(id);
+        if(dto != null){
+            String result="이미 사용 중인 아이디입니다.";
+            return result;
+        }else {
+            String result="사용 가능한 아이디입니다.";
+            return result;
+        }
     }
 
     @PostMapping("/webuser/insert")

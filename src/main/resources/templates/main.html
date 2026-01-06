@@ -69,7 +69,17 @@
             </tr>
         </table>
         <div>
-
+            <ul id="pagingArea">
+                <li th:if="${pageInfo.startPageNum > 1}">
+                    <a th:href="@{/main(pageNum=${pageInfo.startPageNum - 1})}">이전</a>
+                </li>
+                <li th:each="num:${#numbers.sequence(pageInfo.startPageNum,pageInfo.endPageNum)}">
+                    <a th:href="@{/main(pageNum=${num})}">[[${num}]]</a>
+                </li>
+                <li th:if="${pageInfo.endPageNum < pageInfo.totalPageCount}">
+                    <a th:href="@{/main(pageNum=${pageInfo.endPageNum + 1})}">다음</a>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="footer"></div>
@@ -89,14 +99,23 @@
         location.href="/main";
     }
 
-    function goinbound(){
+    function goinbound(pageNum = 1){
         const table=document.getElementById("adminTable");
-        fetch('/goinbound')
+        const paging=document.getElementById("pagingArea");
+
+        fetch(`/goinbound?pageNum=${pageNum}`)
             .then(resp=>resp.json())
             .then(data=>{
-                table.innerHTML="";
 
-                data.forEach(l=>{
+                const list=data.list;
+                const pageInfo=data.pageInfo;
+
+                //테이블 초기화
+                table.innerHTML="";
+                paging.innerHTML="";
+
+                //목록 출력
+                list.forEach(l=>{
                     table.innerHTML+=`
                                     <tr>
                                         <td>
@@ -106,19 +125,55 @@
                                         </td>
                                     </tr>
                                     `;
-                })
+                });
+
+                //이전 버튼
+                if (pageInfo.startPageNum > 1) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:goinbound(${pageInfo.startPageNum - 1})">이전</a>
+                    </li>
+                `;
+                }
+
+                //페이지 번호
+                for (let i = pageInfo.startPageNum; i <= pageInfo.endPageNum; i++) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:goinbound(${i})">${i}</a>
+                    </li>
+                `;
+                }
+
+                //다음 버튼
+                if (pageInfo.endPageNum < pageInfo.totalPageCount) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:goinbound(${pageInfo.endPageNum + 1})">다음</a>
+                    </li>
+                `;
+                }
             })
     }
 
-    function goinbound2(){
+    function goinbound2(pageNum = 1){
         const table=document.getElementById("userTable");
-        fetch('/goinbound')
+        const paging=document.getElementById("pagingArea");
+
+        fetch(`/goinbound?pageNum=${pageNum}`)
             .then(resp=>resp.json())
             .then(data=>{
-                table.innerHTML="";
 
-                data.forEach(l=> {
-                    table.innerHTML += `
+                const list=data.list;
+                const pageInfo=data.pageInfo;
+
+                //테이블 초기화
+                table.innerHTML="";
+                paging.innerHTML="";
+
+                //목록 출력
+                list.forEach(l=>{
+                    table.innerHTML+=`
                                     <tr>
                                         <td>
                                             <p>${l.inbound_id} 요청자:${l.webuser_id} ${l.approval_status}</p>
@@ -127,18 +182,54 @@
                                         </td>
                                     </tr>
                                     `;
-                })
+                });
+
+                //이전 버튼
+                if (pageInfo.startPageNum > 1) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:goinbound(${pageInfo.startPageNum - 1})">이전</a>
+                    </li>
+                `;
+                }
+
+                //페이지 번호
+                for (let i = pageInfo.startPageNum; i <= pageInfo.endPageNum; i++) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:goinbound(${i})">${i}</a>
+                    </li>
+                `;
+                }
+
+                //다음 버튼
+                if (pageInfo.endPageNum < pageInfo.totalPageCount) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:goinbound(${pageInfo.endPageNum + 1})">다음</a>
+                    </li>
+                `;
+                }
             })
     }
 
-    function gooutbound(){
+    function gooutbound(pageNum = 1){
         const table=document.getElementById("adminTable");
-        fetch('/gooutbound')
+        const paging=document.getElementById("pagingArea");
+
+        fetch(`/gooutbound?pageNum=${pageNum}`)
             .then(resp=>resp.json())
             .then(data=>{
-                table.innerHTML="";
 
-                data.forEach(l=>{
+                const list=data.list;
+                const pageInfo=data.pageInfo;
+
+                //테이블 초기화
+                table.innerHTML="";
+                paging.innerHTML="";
+
+                //목록 출력
+                list.forEach(l=>{
                     table.innerHTML+=`
                                     <tr>
                                         <td>
@@ -148,18 +239,54 @@
                                         </td>
                                     </tr>
                                     `;
-                })
+                });
+
+                //이전 버튼
+                if (pageInfo.startPageNum > 1) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:gooutbound(${pageInfo.startPageNum - 1})">이전</a>
+                    </li>
+                `;
+                }
+
+                //페이지 번호
+                for (let i = pageInfo.startPageNum; i <= pageInfo.endPageNum; i++) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:gooutbound(${i})">${i}</a>
+                    </li>
+                `;
+                }
+
+                //다음 버튼
+                if (pageInfo.endPageNum < pageInfo.totalPageCount) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:gooutbound(${pageInfo.endPageNum + 1})">다음</a>
+                    </li>
+                `;
+                }
             })
     }
 
-    function gooutbound2(){
+    function gooutbound2(pageNum = 1){
         const table=document.getElementById("userTable");
-        fetch('/gooutbound')
+        const paging=document.getElementById("pagingArea");
+
+        fetch(`/gooutbound?pageNum=${pageNum}`)
             .then(resp=>resp.json())
             .then(data=>{
-                table.innerHTML="";
 
-                data.forEach(l=>{
+                const list=data.list;
+                const pageInfo=data.pageInfo;
+
+                //테이블 초기화
+                table.innerHTML="";
+                paging.innerHTML="";
+
+                //목록 출력
+                list.forEach(l=>{
                     table.innerHTML+=`
                                     <tr>
                                         <td>
@@ -169,7 +296,34 @@
                                         </td>
                                     </tr>
                                     `;
-                })
+                });
+
+                //이전 버튼
+                if (pageInfo.startPageNum > 1) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:gooutbound(${pageInfo.startPageNum - 1})">이전</a>
+                    </li>
+                `;
+                }
+
+                //페이지 번호
+                for (let i = pageInfo.startPageNum; i <= pageInfo.endPageNum; i++) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:gooutbound(${i})">${i}</a>
+                    </li>
+                `;
+                }
+
+                //다음 버튼
+                if (pageInfo.endPageNum < pageInfo.totalPageCount) {
+                    paging.innerHTML += `
+                    <li>
+                        <a href="javascript:gooutbound(${pageInfo.endPageNum + 1})">다음</a>
+                    </li>
+                `;
+                }
             })
     }
 
