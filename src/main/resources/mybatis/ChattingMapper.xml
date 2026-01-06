@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ChattingMapper">
+    <!-- 로그인 한 유저가 참여한 채팅방 목록 -->
+    <select id="chatRoomAll" parameterType="int" resultType="ChatRoomDTO">
+        select r.room_id,r.room_type,r.room_name
+        from chat_room r join chat_room_user ru
+        on r.room_id=ru.room_id
+        where ru.user_id=#{user_id}
+    </select>
+    <!-- 해당 유저가 참여한 채팅방인지 확인 -->
+    <select id="isParticipant" parameterType="map" resultType="int">
+        select count(*)
+        from chat_room_user
+        where room_id = #{room_id}
+        and user_id = #{user_id}
+    </select>
+    <!-- room_id 로 채팅방 정보 조회 -->
+    <select id="getRoom" parameterType="int" resultType="ChatRoomDTO">
+        select * from chat_room where room_id = #{room_id}
+    </select>
+    <!-- 해당 채팅방의 과거 메시지 조회 -->
+    <select id="getMessages" parameterType="int" resultType="ChatMessageDTO">
+        select * from chat_message where room_id = #{room_id} order by message_id asc
+    </select>
+    <insert id="sendMessage" parameterType="map">
+        insert into chat_message values(message_seq.nextval,#{room_id},#{sender_id},#{content},sysdate)
+    </insert>
+</mapper>
