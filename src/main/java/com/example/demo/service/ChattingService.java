@@ -48,22 +48,12 @@ public class ChattingService {
         mapper.readMessages(roomId,readerId);
     }
 
-    public List<Integer> readMessagesReturnIds(int roomId, int readerId){
-        Map<String,Object> map=new HashMap<>();
-        map.put("roomId",roomId);
-        map.put("readerId",readerId);
-
-        //db에서 읽음 처리 후 읽은 메시지 id 리스트 반환
-        List<Integer> readIds=mapper.readMessagesReturnIds(map);
-        return readIds;
-    }
-
-    public Integer markLastMessageAsRead(int roomId, int senderId){
-        //내 id 를 제외하고 현재 접속 중인 사람 추리기
-        List<Integer> otherUsers = store.getUsersInRoomExcept(roomId,senderId);
+    public Integer markLastMessageAsRead(int roomId, int senderId, int readerId){
+        //상대방이 현재 접속 중인지 확인
+        boolean isReaderPresent=store.isUserInRoom(roomId,readerId);
 
         //상대방이 접속 중이면 읽음 처리 안 함
-        if(!otherUsers.isEmpty()){
+        if(isReaderPresent){
             System.out.println("상대방이 채팅방에 접속 중이라 읽음 처리 안 함");
             return null;
         }

@@ -43,7 +43,7 @@ public class ChatPresenceStore {
     }
 
     public List<Integer> getUsersInRoomExcept(int roomId, int excludeUserId){
-        Set<Integer> users = roomUsers.get("roomId");
+        Set<Integer> users = roomUsers.get(roomId);
         if(users == null) return Collections.emptyList();
 
         List<Integer> result=new ArrayList<>();
