@@ -2,8 +2,7 @@ package com.example.demo;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -36,6 +35,25 @@ public class ChatPresenceStore {
     // 방에 몇 명 접속 중인지
     public int getUserCount(int roomId){
         return roomUsers.getOrDefault(roomId, Set.of()).size();
+    }
+
+    // 현재 방에 접속 중인 모든 유저 반환
+    public Set<Integer> getUsersInRoom(int roomId){
+        return roomUsers.getOrDefault(roomId, Set.of());
+    }
+
+    public List<Integer> getUsersInRoomExcept(int roomId, int excludeUserId){
+        Set<Integer> users = roomUsers.get("roomId");
+        if(users == null) return Collections.emptyList();
+
+        List<Integer> result=new ArrayList<>();
+        for(Integer userId : users){
+            if(!Objects.equals(userId, excludeUserId)){
+                result.add(userId);
+            }
+        }
+
+        return result;
     }
 
 

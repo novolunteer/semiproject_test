@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.ChatPresenceStore;
 import com.example.demo.dto.ChatMessageDTO;
 import com.example.demo.dto.ChatRoomDTO;
 import com.example.demo.mapper.ChattingMapper;
@@ -17,6 +18,7 @@ import java.util.Objects;
 @Transactional
 public class ChattingService {
     private final ChattingMapper mapper;
+    private final ChatPresenceStore store;
 
     public List<ChatRoomDTO> chatRoomAll(int user_id){
         return mapper.chatRoomAll(user_id);
@@ -40,5 +42,44 @@ public class ChattingService {
     public void sendMessage(ChatMessageDTO dto){
         int n=mapper.sendMessage(dto);
         System.out.println("insert => " + n);
+    }
+
+    public void readMessages(int roomId, int readerId){
+        mapper.readMessages(roomId,readerId);
+    }
+
+    public List<Integer> readMessagesReturnIds(int roomId, int readerId){
+        Map<String,Object> map=new HashMap<>();
+        map.put("roomId",roomId);
+        map.put("readerId",readerId);
+
+        //db에서 읽음 처리 후 읽은 메시지 id 리스트 반환
+        List<Integer> readIds=mapper.readMessagesReturnIds(map);
+        return readIds;
+    }
+
+    public Integer markLastMessageAsRead(int roomId, int senderId){
+        //내 id 를 제외하고 현재 접속 중인 사람 추리기
+        List<Integer> otherUsers = store.getUsersInRoomExcept(roomId,senderId);
+
+        //상대방이 접속 중이면 읽음 처리 안 함
+        if(!otherUsers.isEmpty()){
+            System.out.println("상대방이 채팅방에 접속 중이라 읽음 처리 안 함");
+            return null;
+        }
+
+        //내가 보낸 메시지 중 읽히지 않은 마지막 메시지 조회
+        Map<String,Object> map=new HashMap<>();
+        map.put("roomId",roomId);
+        map.put("senderId",senderId);
+
+        Integer lastUnreadId=mapper.getLastUnreadMessageId(map);
+
+        //메시지가 있으면 읽음 처리
+        if(lastUnreadId != null){
+            mapper.markMessageRead(lastUnreadId);
+            System.out.println("읽음 처리된 메시지 id: " + lastUnreadId);
+        }
+        return lastUnreadId;
     }
 }

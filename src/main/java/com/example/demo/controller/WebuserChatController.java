@@ -29,28 +29,42 @@ public class WebuserChatController {
         return "chatRoomList";
     }
 
-    @GetMapping("/chat/room/{room_id}")
-    public String chatRoom(@PathVariable int room_id, HttpSession session, Model model){
-        int user_id = (int) session.getAttribute("webuser_id");
+//    @GetMapping("/chat/room/{room_id}")
+//    public String chatRoom(@PathVariable int room_id, HttpSession session, Model model){
+//        int user_id = (int) session.getAttribute("webuser_id");
+//
+//        //참여자 확인
+//        if(!service.isParticipant(room_id,user_id)){
+//            return "redirect:/chatRoomlist";
+//        }
+//
+//        //채팅방 정보
+//        ChatRoomDTO room=service.getRoom(room_id);
+//
+//        //과거 메시지
+//        List<ChatMessageDTO> messages=service.getMessages(room_id);
+//
+//        model.addAttribute("room",room);
+//        model.addAttribute("room_id",room.getRoom_id());
+//        model.addAttribute("messages",messages);
+//        model.addAttribute("user_id",user_id);
+//
+//        return "chatRoom";
+//
+//    }
 
-        //참여자 확인
-        if(!service.isParticipant(room_id,user_id)){
-            return "redirect:/chatRoomlist";
-        }
+    @GetMapping("/chat/room/{roomId}")
+    public String chatRoom(@PathVariable int roomId,
+                           HttpSession session,
+                           Model model){
+        int userId = (int) session.getAttribute("webuser_id");
 
-        //채팅방 정보
-        ChatRoomDTO room=service.getRoom(room_id);
+        List<ChatMessageDTO> messages=service.getMessages(roomId);
 
-        //과거 메시지
-        List<ChatMessageDTO> messages=service.getMessages(room_id);
-
-        model.addAttribute("room",room);
-        model.addAttribute("room_id",room.getRoom_id());
         model.addAttribute("messages",messages);
-        model.addAttribute("user_id",user_id);
-
+        model.addAttribute("room_id",roomId);
+        model.addAttribute("user_id",userId);
         return "chatRoom";
-
     }
 
     @PostMapping("/chat/message/send")
@@ -58,7 +72,7 @@ public class WebuserChatController {
                               @RequestParam int sender_id,
                               @RequestParam String content){
 
-        ChatMessageDTO dto=new ChatMessageDTO(0,room_id,sender_id,content,null);
+        ChatMessageDTO dto=new ChatMessageDTO(0,room_id,sender_id,content,null,0);
         service.sendMessage(dto);
 
         return "redirect:/chat/room/" + room_id;

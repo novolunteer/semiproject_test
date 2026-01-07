@@ -16,4 +16,10 @@ public interface ChattingMapper {
     ChatRoomDTO getRoom(int room_id);
     List<ChatMessageDTO> getMessages(int room_id);
     int sendMessage(ChatMessageDTO dto);
+    int readMessages(@Param("roomId") int roomId,
+                     @Param("readerId") int readerId);
+    List<Integer> readMessagesReturnIds(Map<String,Object> map);
+
+    Integer getLastUnreadMessageId(Map<String,Object> map);
+    void markMessageRead(@Param("messageId") int messageId);
 }
