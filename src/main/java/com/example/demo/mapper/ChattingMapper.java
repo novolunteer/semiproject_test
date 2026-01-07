@@ -15,5 +15,5 @@ public interface ChattingMapper {
     int isParticipant(Map<String, Object> map);
     ChatRoomDTO getRoom(int room_id);
     List<ChatMessageDTO> getMessages(int room_id);
-    int sendMessage(Map<String,Object> map);
+    int sendMessage(ChatMessageDTO dto);
 }

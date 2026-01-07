@@ -5,6 +5,7 @@ import com.example.demo.dto.ChatRoomDTO;
 import com.example.demo.mapper.ChattingMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChattingService {
     private final ChattingMapper mapper;
 
@@ -35,11 +37,8 @@ public class ChattingService {
         return mapper.getMessages(room_id);
     }
 
-    public void sendMessage(int room_id,int sender_id,String content){
-        Map<String,Object> map=new HashMap<>();
-        map.put("room_id",room_id);
-        map.put("sender_id",sender_id);
-        map.put("content",content);
-        mapper.sendMessage(map);
+    public void sendMessage(ChatMessageDTO dto){
+        int n=mapper.sendMessage(dto);
+        System.out.println("insert => " + n);
     }
 }

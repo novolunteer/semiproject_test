@@ -58,7 +58,8 @@ public class WebuserChatController {
                               @RequestParam int sender_id,
                               @RequestParam String content){
 
-        service.sendMessage(room_id,sender_id,content);
+        ChatMessageDTO dto=new ChatMessageDTO(0,room_id,sender_id,content,null);
+        service.sendMessage(dto);
 
         return "redirect:/chat/room/" + room_id;
     }

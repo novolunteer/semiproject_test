@@ -25,7 +25,10 @@
     <select id="getMessages" parameterType="int" resultType="ChatMessageDTO">
         select * from chat_message where room_id = #{room_id} order by message_id asc
     </select>
-    <insert id="sendMessage" parameterType="map">
-        insert into chat_message values(message_seq.nextval,#{room_id},#{sender_id},#{content},sysdate)
+    <insert id="sendMessage" parameterType="ChatMessageDTO">
+        insert into chat_message
+        (message_id, room_id, sender_id, content, created_at)
+        values
+        (message_seq.nextval,#{room_id},#{sender_id},#{content},sysdate)
     </insert>
 </mapper>
